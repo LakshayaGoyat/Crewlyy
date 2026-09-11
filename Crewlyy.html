@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CREWLYY - Hackathon Teammate Matchmaker</title>
+  <style>
+    /* CSS Variables & Base Styles */
+    :root {
+      --bg-dark: #070919;
+      --bg-card: #0f132e;
+      --bg-card-glow: #131738;
+      --bg-input: #171c42;
+      --primary-accent: #00aaff;
+      --primary-accent-hover: #00aaff;
+      --blue-accent: #202754;
+      --text-main: #ffffff;
+      --text-muted: #8d95c4;
+      --border-color: #202754;
+      --tag-bg: #1c2352;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* PURE CSS PAGE SWITCHING ENGINE */
+    .page-section {
+      display: none;
+      width: 100%;
+      flex: 1;
+    }
+
+    #page-1 {
+      display: block;
+    }
+
+    body:has(:target) .page-section {
+      display: none !important;
+    }
+
+    #page-1:target,
+    #page-2:target,
+    #page-3:target,
+    #page-4:target,
+    #page-5:target,
+    #coming-soon:target {
+      display: block !important;
+    }
+
+    /* Coming Soon View Styling */
+    .coming-soon-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 250px);
+      text-align: center;
+    }
+
+    .coming-soon-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    /* Global Navigation Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 2rem;
+      background-color: rgba(7, 9, 25, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #fff;
+    }
+
+    .nav-links a.discover-pill {
+      background: var(--blue-accent);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 6px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .search-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Tooltips */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip-container .tooltip-text {
+      visibility: hidden;
+      width: 100px;
+      background-color: var(--primary-accent);
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 4px 0;
+      font-size: 0.7rem;
+      position: absolute;
+      z-index: 10;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background-color: var(--primary-accent);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.6rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px rgba(255, 138, 0, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-launch {
+      background-color: #1a2046;
+      color: #fff;
+      font-weight: 600;
+      padding: 0.75rem 1.6rem;
+      border-radius: 8px;
+      border: 1px solid #2e3875;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .btn-launch:hover {
+      background-color: #242c61;
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-card);
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-color);
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.8rem;
+    }
+
+    .avatar-img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Global Layout Containers */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1rem 1rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge span.dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--primary-accent);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero h1 span, .hero h1 i {
+      font-style: italic;
+      font-family: Georgia, serif;
+      font-weight: 400;
+    }
+
+    .hero h1 .highlight {
+      color: var(--primary-accent);
+      font-style: normal;
+      font-family: inherit;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Robot Card Showcase Box */
+    .hero-robot-card {
+      width: 320px;
+      height: 200px;
+      background: radial-gradient(circle at center, #1b224d 0%, #101432 100%);
+      border: 1px solid #1f2758;
+      border-radius: 16px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,138,0,0.05);
+      position: relative;
+    }
+
+    .hero-robot-card img {
+      width: 130px;
+      height: auto;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+    }
+
+    .hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-trust-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.8rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4rem;
+    }
+
+    .hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      background: rgba(15, 19, 46, 0.6);
+      padding: 1.8rem 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin: 2rem 0 4rem;
+      text-align: left;
+    }
+
+    .metric-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .metric-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .metric-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* Section Edit Pencil Button */
+    .edit-pencil-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 28px;
+      height: 28px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .edit-pencil-btn:hover {
+      background: var(--primary-accent);
+      color: #000;
+      border-color: var(--primary-accent);
+      transform: scale(1.08);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.8rem 0;
+    }
+
+    .tag {
+      background-color: var(--tag-bg);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .tag.accent {
+      background: rgba(255, 138, 0, 0.15);
+      color: var(--primary-accent);
+      border: 1px solid var(--primary-accent);
+    }
+
+    /* Page 2 Specifics */
+    .auth-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      min-height: calc(100vh - 200px);
+      align-items: center;
+    }
+
+    /* Page 3 Specifics */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .filter-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .filter-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-group h4 {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* Page 4 Specifics */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Page 5 Specifics */
+    .builder-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr 300px;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .coming-soon-banner {
+      background: #191c3d;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 8px;
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Pure CSS Modal Selector */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-overlay:target {
+      display: flex !important;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      width: 90%;
+      max-width: 500px;
+      padding: 2rem;
+      border-radius: 8px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      background-color: #040510;
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 4rem 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .auth-wrapper, .dashboard-layout, .profile-grid, .builder-layout, .footer-grid, .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- PAGE 1: HOME / LANDING PAGE (#page-1)      -->
+  <!-- ========================================== -->
+  <div id="page-1" class="page-section">
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      
+      <!-- Minimalist Navigation for Page 1 -->
+      <ul class="nav-links">
+        <li><a href="#page-3" class="discover-pill">Discover</a></li>
+        <li><a href="#coming-soon">Features</a></li>
+        <li><a href="#coming-soon">Hackathons</a></li>
+      </ul>
+
+      <!-- Sign In Button -->
+      <div class="nav-right">
+        <a href="#page-2" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size:0.82rem;">Sign In</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-badge">
+          <span class="dot"></span> FORM THE ULTIMATE TEAM / ARCHITECT MATRIX v2.4
+        </div>
+        
+        <h1>Ready for <i>Hackathons?</i><br>Assemble Your <span class="highlight">Dream Crew</span>.</h1>
+        
+        <p>Eliminate random solo queuing. Synthesize complementary tech stacks, verify builder credibility through automated telemetry, and dominate global leaderboards.</p>
+
+        <!-- Centered Robot Logo Card -->
+        <div class="hero-robot-card">
+          <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Robot Mascot">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="hero-btns">
+          <a href="#page-3" class="btn-primary">FIND YOUR CREW &rarr;</a>
+          <a href="#page-5" class="btn-launch">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71 1.26-1.5 1.5-2.25M12 15l-3-3m8-8a8 8 0 0 0-11.3 0L3 6.7 8.3 12l2.7 2.7 5.3 5.3 2.7-2.7a8 8 0 0 0 0-11.3z"/></svg> 
+            LAUNCH CREW
+          </a>
+        </div>
+
+        <!-- Security / Trust Badges Row -->
+        <div class="hero-trust-bar">
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Encrypted Comms
+          </div>
+          <span style="color:var(--border-color);">•</span>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" color="#ff8a00"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Verified Github Sync
+          </div>
+          <span style="color:var(--border-color);">•</span>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Real-time Pings
+          </div>
+        </div>
+      </section>
+
+      <!-- Metrics Grid -->
+      <div class="metrics-grid">
+        <div>
+          <div class="metric-number">4,850<span style="color:var(--primary-accent);">+</span></div>
+          <div class="metric-label">HACKERS REGISTERED</div>
+          <div class="metric-sub">📈 +34% past month</div>
+        </div>
+        <div>
+          <div class="metric-number">1,240<span style="color:var(--primary-accent);">+</span></div>
+          <div class="metric-label">TEAMS ASSEMBLED</div>
+          <div class="metric-sub">👥 Average synergy index 94.2</div>
+        </div>
+        <div>
+          <div class="metric-number">₹85L<span style="color:var(--primary-accent);">+</span></div>
+          <div class="metric-label">PRIZES CLAIMED</div>
+          <div class="metric-sub">🏆 Across ETH, Solana, & MLH</div>
+        </div>
+        <div>
+          <div class="metric-number">160<span style="color:var(--primary-accent);">+</span></div>
+          <div class="metric-label">HACKATHONS SUPPORTED</div>
+          <div class="metric-sub">🌐 Global arena integrations</div>
+        </div>
+      </div>
+
+      <section id="features" style="margin-top: 4rem;">
+        <h2 style="font-size:1.5rem; margin-bottom:1.5rem;">How You Build Your Crew</h2>
+        <div class="card-grid">
+          <div class="card">
+            <span style="color:var(--primary-accent); font-weight:bold;">01</span>
+            <h3>Initialize Profile</h3>
+            <p>Connect accounts, list your core stack telemetry, repository commits, and project execution profile.</p>
+          </div>
+          <div class="card">
+            <span style="color:var(--primary-accent); font-weight:bold;">02</span>
+            <h3>Discover Teammates</h3>
+            <p>Browse specialized real-time match nodes filtered by smart contract engineering, AI systems, Rust, or UI/UX architecture.</p>
+          </div>
+          <div class="card">
+            <span style="color:var(--primary-accent); font-weight:bold;">03</span>
+            <h3>Form Your Crew</h3>
+            <p>Assemble your squad, lock in specialized roles, and optimize ephemeral development war rooms before event start.</p>
+          </div>
+          <div class="card">
+            <span style="color:var(--primary-accent); font-weight:bold;">04</span>
+            <h3>Deploy & Hack</h3>
+            <p>Enter the competitive arena with balanced chemistry, verified credentials, and real-time sprint readiness.</p>
+          </div>
+        </div>
+      </section>
+
+      <section style="background: var(--bg-card); padding: 3rem; border-radius:12px; border:1px solid var(--border-color); text-align:center; margin: 4rem 0;">
+        <h2>Assemble Your Ultimate Hacker Squad Now</h2>
+        <p style="color:var(--text-muted); margin: 1rem 0 1.5rem;">Don't leave your next hackathon victory to chance. Connect with builders who complement your stack.</p>
+        <a href="#page-3" class="btn-primary">Find Your Squad</a>
+        <a href="#page-2" class="btn-secondary" style="margin-left: 0.5rem;">Join Platform &rarr;</a>
+      </section>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PAGE 2: LOGIN / AUTH PAGE (#page-2)        -->
+  <!-- ========================================== -->
+  <div id="page-2" class="page-section">
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      <div class="nav-right">
+        <a href="#page-1" class="btn-secondary">&larr; Back to Overview</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="auth-wrapper">
+        <div class="card" style="padding: 2.5rem; background: linear-gradient(135deg, #0f132e 0%, #151a42 100%);">
+          <span style="font-size:0.7rem; color:var(--primary-accent); font-weight:bold;">CLEARED PROTOCOL PENETRATION</span>
+          <h1 style="font-size:2.2rem; margin:1rem 0;">Assemble high-velocity engineering crews.</h1>
+          <p style="margin-bottom:2rem;">Architect cross-disciplinary product teams, technical co-founders, and elite builder collectives navigating 48-hour sprint cycles.</p>
+
+          <div style="display:flex; gap:1.5rem;">
+            <div>
+              <div style="font-size:1.2rem; font-weight:bold; color:var(--primary-accent);">98.4%</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">MATCH ACCURACY</div>
+            </div>
+            <div>
+              <div style="font-size:1.2rem; font-weight:bold; color:var(--primary-accent);">&lt; 4m</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">DEPLOY LATENCY</div>
+            </div>
+            <div>
+              <div style="font-size:1.2rem; font-weight:bold; color:var(--primary-accent);">1,420</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">ACTIVE NODES</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 2.5rem;">
+          <span style="font-size:0.7rem; color:var(--text-muted); float:right;">v2.4.0</span>
+          <h2 style="margin-bottom:0.5rem;">Welcome back</h2>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Enter your credentials to enter your Creative workspace and squad command matrix.</p>
+
+          <div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" class="form-control" value="alex.morgan@dev.com">
+            </div>
+
+            <div class="form-group">
+              <label style="display:flex; justify-content:space-between;">
+                <span>Password</span>
+                <span class="tooltip-container"><a href="#coming-soon" style="font-size:0.75rem; color:var(--primary-accent);">Forgot password?</a></span>
+              </label>
+              <input type="password" class="form-control" value="••••••••••••">
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; font-size:0.8rem; color:var(--text-muted);">
+              <label><input type="checkbox" checked> Stay authenticated</label>
+              <span>128-Bit Encryption</span>
+            </div>
+
+            <a href="#page-3" class="btn-primary" style="width:100%; justify-content:center; padding:0.8rem;">Login to Workspace ⚡</a>
+          </div>
+
+          <div style="text-align:center; margin: 1.5rem 0; font-size:0.75rem; color:var(--text-muted);">OR CONNECT VIA</div>
+
+          <a href="#page-3" class="btn-secondary" style="width:100%; justify-content:center; display:flex;">
+            🌐 Sign in with Google Workspace
+          </a>
+
+          <div style="text-align:center; margin-top:2rem; font-size:0.8rem; color:var(--text-muted);">
+            Don't have an account yet? <a href="#page-5" style="color:var(--primary-accent);">Assemble Crew</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PAGE 3: DASHBOARD / SQUADS MATCH (#page-3) -->
+  <!-- ========================================== -->
+  <div id="page-3" class="page-section">
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      <ul class="nav-links">
+        <li><a href="#page-3" class="active">Discover</a></li>
+        <li><a href="#coming-soon">Features</a></li>
+        <li><a href="#coming-soon">Hackathons</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#page-5" class="btn-primary" style="padding: 0.5rem 1rem; font-size:0.8rem;">+ Create Team</a>
+        <a href="#page-4" class="user-profile-badge">
+          <img src="https://www.corporatephotographerslondon.com/wp-content/uploads/2022/02/FRA-1699dark-sq.jpg" class="avatar-img" alt="Alex Avatar">
+          <div>
+            <div style="font-weight:bold; font-size:0.75rem;">Alex Morgan</div>
+            <div style="font-size:0.6rem; color:var(--text-muted);">Lead Architect</div>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section style="background: radial-gradient(circle at top, #182052 0%, var(--bg-card) 100%); border: 1px solid var(--border-color); padding: 2.5rem; border-radius: 12px; text-align: center;">
+        <span style="font-size:0.7rem; color:var(--primary-accent); letter-spacing:1px; background:rgba(255,138,0,0.1); padding:4px 10px; border-radius:20px;">GLOBAL HACKER SYNTHESIS ENGINE</span>
+        <h1 style="margin: 1rem 0; font-size: 2.2rem;">Assemble your dream crew, <i>tackle massive challenges</i></h1>
+        <p style="color:var(--text-muted); max-width:600px; margin: 0 auto 1.5rem; font-size:0.9rem;">Explore existing team drafts with verified hacker profiles, select your needed skills, and merge forces instantly into high-output squads.</p>
+        
+        <div style="display:flex; justify-content:center; gap:0.5rem; max-width:600px; margin: 0 auto;">
+          <input type="text" class="form-control" placeholder="Search projects, hackathons, or technologies...">
+          <a href="#page-3" class="btn-primary">Find Teams &rarr;</a>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:1rem; margin-top:1.5rem; font-size:0.8rem;">
+          <a href="#page-3" class="tag accent">Explore Teams</a>
+          <a href="#coming-soon" class="tag">Hackathons <span style="font-size:0.6rem; color:var(--primary-accent);">SOON</span></a>
+          <a href="#coming-soon" class="tag">My Requests</a>
+          <a href="#page-5" class="tag" style="background:var(--blue-accent); color:#fff;">+ Build Your Own Crew</a>
+        </div>
+      </section>
+
+      <div class="dashboard-layout">
+        <aside class="filter-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <strong style="font-size:1rem;">⚡ Filters</strong>
+            <a href="#page-3" style="font-size:0.75rem; color:var(--text-muted);">Reset All</a>
+          </div>
+
+          <div class="filter-group">
+            <h4>SPOTS AVAILABLE</h4>
+            <label class="filter-option"><input type="checkbox" checked> 1 Spot Left <span style="font-size:0.65rem; background:red; color:#fff; padding:1px 4px; border-radius:3px; margin-left:auto;">Urgent</span></label>
+            <label class="filter-option"><input type="checkbox" checked> 2 Spots Left</label>
+            <label class="filter-option"><input type="checkbox"> 3+ Spots Left</label>
+          </div>
+
+          <div class="filter-group">
+            <h4>FEATURED HACKATHONS</h4>
+            <label class="filter-option"><input type="checkbox" checked> EthGlobal 2026 <span style="margin-left:auto;">12</span></label>
+            <label class="filter-option"><input type="checkbox"> HealthHacks 2026 <span style="margin-left:auto;">9</span></label>
+            <label class="filter-option"><input type="checkbox"> GreenTech Hack <span style="margin-left:auto;">5</span></label>
+          </div>
+
+          <div class="filter-group">
+            <h4>HACKER EXPERIENCE</h4>
+            <label class="filter-option"><input type="radio" name="exp" checked> All Levels</label>
+            <label class="filter-option"><input type="radio" name="exp"> Beginner Friendly</label>
+            <label class="filter-option"><input type="radio" name="exp"> Intermediate</label>
+            <label class="filter-option"><input type="radio" name="exp"> Advanced Architecture</label>
+          </div>
+        </aside>
+
+        <section>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <h3>Matching Squads <span style="font-size:0.8rem; background:var(--tag-bg); padding:2px 8px; border-radius:12px; color:var(--primary-accent);">4 SQUADS READY TO DEPLOY</span></h3>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Sort by: Most Recent</span>
+          </div>
+
+          <div class="card-grid" style="grid-template-columns: repeat(2, 1fr); margin-top:0;">
+            
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                <span style="font-weight:bold; font-size:1.1rem;">EcoTrack</span>
+                <span style="background:var(--primary-accent); color:#000; font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">3 SPOTS LEFT</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">GreenTech Hack 2026</div>
+              <p>A gamified carbon footprint offset tracker utilizing real-time IoT smart meter telemetry and verified green validator nodes.</p>
+              <div class="tag-container">
+                <span class="tag">Node.js</span>
+                <span class="tag">React Native</span>
+                <span class="tag">Pitch / Deck</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:1.2rem;">
+                <a href="#page-5" class="btn-secondary" style="font-size:0.75rem;">View Idea</a>
+                <a href="#page-4" class="btn-primary" style="font-size:0.75rem; padding:0.5rem 1rem;">Request to Join</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                <span style="font-weight:bold; font-size:1.1rem;">ByteCraft</span>
+                <span style="background:rgba(255,138,0,0.2); color:var(--primary-accent); font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">2 SPOTS LEFT</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">Figma DevFest 2026</div>
+              <p>Collaborative canvas editor optimized for ultra low-latency design handoffs, compiling Figma nodes directly into production code.</p>
+              <div class="tag-container">
+                <span class="tag">Wasm</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">Prod Mgmt</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:1.2rem;">
+                <a href="#page-5" class="btn-secondary" style="font-size:0.75rem;">View Idea</a>
+                <a href="#page-4" class="btn-primary" style="font-size:0.75rem; padding:0.5rem 1rem;">Request to Join</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                <span style="font-weight:bold; font-size:1.1rem;">ScribeDoc</span>
+                <span style="background:red; color:#fff; font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">1 SPOT LEFT</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">HealthHacks 2026</div>
+              <p>Automated medical transcription platform with clinical action-item parsing, HIPAA-compliant on-device vector storage.</p>
+              <div class="tag-container">
+                <span class="tag">Python</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">UI/UX Design</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:1.2rem;">
+                <a href="#page-5" class="btn-secondary" style="font-size:0.75rem;">View Idea</a>
+                <a href="#page-4" class="btn-primary" style="font-size:0.75rem; padding:0.5rem 1rem;">Request to Join</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                <span style="font-weight:bold; font-size:1.1rem;">Quasar Game Studio</span>
+                <span style="background:red; color:#fff; font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">1 SPOT LEFT</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">Web3 Play Arena</div>
+              <p>Multiplayer cosmic arena game built with custom deterministic physics, zero server trust, and browser-native WebGL shading.</p>
+              <div class="tag-container">
+                <span class="tag">C++</span>
+                <span class="tag">WebGL</span>
+                <span class="tag">Rust</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:1.2rem;">
+                <a href="#page-5" class="btn-secondary" style="font-size:0.75rem;">View Idea</a>
+                <a href="#page-4" class="btn-primary" style="font-size:0.75rem; padding:0.5rem 1rem;">Request to Join</a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PAGE 4: USER PROFILE MANAGEMENT (#page-4)  -->
+  <!-- ========================================== -->
+  <div id="page-4" class="page-section">
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      <ul class="nav-links">
+        <li><a href="#page-3">Discover</a></li>
+        <li><a href="#coming-soon">Features</a></li>
+        <li><a href="#coming-soon">Hackathons</a></li>
+        <li><a href="#page-4" class="active">My Profile</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#page-5" class="btn-primary" style="padding: 0.5rem 1rem; font-size:0.8rem;">+ Create Team</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Profile Header Card -->
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <a href="#edit-modal" class="edit-pencil-btn" title="Edit Main Profile">✏️</a>
+        <div style="display:flex; align-items:center; gap:1.5rem;">
+          <img src="https://www.corporatephotographerslondon.com/wp-content/uploads/2022/02/FRA-1699dark-sq.jpg" style="width:70px; height:70px; border-radius:50%; background:var(--bg-input); border:1px solid var(--border-color); object-fit:cover;" alt="Alex Avatar">
+          <div>
+            <h1 style="font-size:1.5rem;">Alex Morgan <span style="font-size:0.7rem; background:green; color:#fff; padding:2px 8px; border-radius:10px; vertical-align:middle;">● AVAILABLE</span></h1>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-top:2px;">Full Stack Developer • Open Source Enthusiast</p>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">📍 San Francisco, CA • SYSTEM ARCHITECT VERIFIED</div>
+          </div>
+        </div>
+        
+        
+      </div>
+
+      <div class="profile-grid">
+        <!-- Left Column -->
+        <div>
+          <!-- Availability & Preferences Card -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <a href="#edit-availability-modal" class="edit-pencil-btn" title="Edit Availability & Preferences">✏️</a>
+            <h3 style="font-size:0.9rem; margin-bottom:1rem; padding-right:1.8rem;">Availability & Preferences</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Preferred Team Size: <strong style="color:#fff;">3 - 5 Members</strong></p>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">Timezone: <strong style="color:#fff;">PST (UTC-8)</strong></p>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">Weekly Capacity: <span class="tag accent">25+ HRS / SPRINT</span></p>
+          </div>
+
+          <!-- Contact & Connect Card -->
+          <div class="card">
+            <a href="#edit-contact-modal" class="edit-pencil-btn" title="Edit Contact & Connect">✏️</a>
+            <h3 style="font-size:0.9rem; margin-bottom:1rem; padding-right:1.8rem;">Contact & Connect</h3>
+            <div style="font-size:0.8rem; display:flex; flex-direction:column; gap:0.6rem; color:var(--text-muted);">
+              <div>📧 Email: <a href="mailto:alex.morgan@dev.com" style="color:#fff;">alex.morgan@dev.com</a></div>
+              <div>💻 GitHub: <a href="#" style="color:#fff;">github.com/alexm-dev</a></div>
+              <div>🔗 LinkedIn: <a href="#" style="color:#fff;">linkedin.com/in/alexm</a></div>
+              <div>🌐 Portfolio: <a href="#" style="color:#fff;">alexmorgan.dev</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div>
+          <!-- About Me Card -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <a href="#edit-about-modal" class="edit-pencil-btn" title="Edit About Me">✏️</a>
+            <h3 style="font-size:0.9rem; margin-bottom:0.8rem; padding-right:1.8rem;">About Me</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6;">
+              I am a passionate software developer with 4+ years of experience building responsive web applications. I love prototyping new concepts, optimizing performance, and translating complex designs into robust codebases. In hackathons, I excel at setting up full-stack architecture quickly, integrating APIs, and leading technical workflow.
+            </p>
+          </div>
+
+          <!-- Technical Arsenal Card -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <a href="#edit-arsenal-modal" class="edit-pencil-btn" title="Edit Technical Arsenal">✏️</a>
+            <h3 style="font-size:0.9rem; margin-bottom:0.8rem; padding-right:1.8rem;">Technical Arsenal</h3>
+            <div class="tag-container">
+              <span class="tag accent">React (EXPERT)</span>
+              <span class="tag accent">TypeScript (EXPERT)</span>
+              <span class="tag accent">Node.js (EXPERT)</span>
+              <span class="tag">Python (ADVANCED)</span>
+              <span class="tag">Docker (ADVANCED)</span>
+              <span class="tag">AWS (ADVANCED)</span>
+              <span class="tag">PostgreSQL (ADVANCED)</span>
+            </div>
+          </div>
+
+          <!-- Hackathon Journey Card -->
+          <div class="card">
+            <a href="#edit-journey-modal" class="edit-pencil-btn" title="Edit Hackathon Journey">✏️</a>
+            <h3 style="font-size:0.9rem; margin-bottom:1rem; padding-right:1.8rem;">Hackathon Journey</h3>
+            
+            <div style="border-left: 2px solid var(--primary-accent); padding-left:1rem; margin-bottom:1.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>Global AI Innovation Summit</strong>
+                <span style="background:gold; color:#000; font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">🏆 1ST PLACE</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Lead Full Stack Developer • October 2025</div>
+              <p style="font-size:0.8rem; margin-top:0.4rem;">Architected and deployed a real-time predictive analytics dashboard utilizing generative AI vectors.</p>
+            </div>
+
+            <div style="border-left: 2px solid var(--border-color); padding-left:1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>Devpost Web3 Hack</strong>
+                <span style="background:var(--border-color); color:#fff; font-size:0.65rem; font-weight:bold; padding:2px 6px; border-radius:4px;">🥈 RUNNER UP</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Smart Contract & Frontend Dev • June 2025</div>
+              <p style="font-size:0.8rem; margin-top:0.4rem;">Integrated zero-knowledge proof verification protocols with a clean React user workspace.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PAGE 5: TEAM BUILDER STUDIO (#page-5)      -->
+  <!-- ========================================== -->
+  <div id="page-5" class="page-section">
+    <div class="coming-soon-banner">
+      WORKSPACE / SQUADS / <strong>TEAM BUILDER STUDIO</strong> • <span>Autosaved to Cloud</span>
+    </div>
+
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      <ul class="nav-links">
+        <li><a href="#page-3">Discover</a></li>
+        <li><a href="#coming-soon">Features</a></li>
+        <li><a href="#coming-soon">Hackathons</a></li>
+        <li><a href="#page-5" class="active">Build Crew</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#page-3" class="btn-secondary">Discard Draft</a>
+        <a href="#page-3" class="btn-primary" style="padding: 0.5rem 1rem; font-size:0.8rem;">Save Draft</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="builder-layout">
+        <div>
+          <div class="card" style="margin-bottom:1.5rem;">
+            <span style="font-size:0.7rem; color:var(--primary-accent); font-weight:bold;">TEAM BUILDER • STEP 01</span>
+            <h3 style="margin: 0.5rem 0;">Bring your idea to life.</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Complete these five foundational anchors to calibrate your squad and open recruitment.</p>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <strong>Team Roster</strong>
+              <span class="tag accent">2/5 Locked</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.8rem; font-size:0.8rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem; background:var(--bg-input); padding:6px; border-radius:6px;">
+                <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" style="width:24px; height:24px; border-radius:50%; object-fit:cover;" alt="Alex Avatar">
+                <div>
+                  <div><strong>Alex Morgan</strong></div>
+                  <div style="font-size:0.65rem; color:var(--text-muted);">Captain • Systems Lead</div>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:0.5rem; background:var(--bg-input); padding:6px; border-radius:6px;">
+                <div style="width:24px; height:24px; border-radius:50%; background:#4a90e2; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:bold;">JC</div>
+                <div>
+                  <div><strong>Jordan Chen</strong></div>
+                  <div style="font-size:0.65rem; color:var(--text-muted);">Core • AI / ML</div>
+                </div>
+              </div>
+
+              <div style="border:1px dashed var(--border-color); padding:8px; border-radius:6px; color:var(--text-muted);">
+                ➕ Frontend Architect (Vacant)
+              </div>
+              <div style="border:1px dashed var(--border-color); padding:8px; border-radius:6px; color:var(--text-muted);">
+                ➕ UI/UX Designer (Vacant)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h2 style="font-size:1.3rem; margin-bottom:0.5rem;">⚡ Tell us about your team</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Give elite builders a compelling reason to commit their hackathon sprint to your mission.</p>
+
+            <div>
+              <div class="form-group">
+                <label>Team Name *</label>
+                <input type="text" class="form-control" value="Pixel Pioneers">
+              </div>
+
+              <div class="form-group">
+                <label>What are you building? (Elevator Pitch)</label>
+                <input type="text" class="form-control" value="An AI-powered accessibility copilot for live events">
+              </div>
+
+              <div class="form-group">
+                <label>Project Description</label>
+                <textarea class="form-control" rows="4">We're making real-time captions, audio cues, and venue guidance work together in one simple mobile experience. Our goal is an inclusive event companion we can demo by Sunday.</textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Skills your crew needs</label>
+                <div class="tag-container">
+                  <span class="tag accent">React ✕</span>
+                  <span class="tag accent">UI/UX Design ✕</span>
+                  <span class="tag accent">AI / ML ✕</span>
+                  <span class="tag accent">Pitching ✕</span>
+                  <span class="tag" style="background:var(--blue-accent); color:#fff; cursor:pointer;">+ Add Skill</span>
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                  <label>Hackathon Location</label>
+                  <input type="text" class="form-control" value="Bengaluru, India">
+                </div>
+                <div class="form-group">
+                  <label>Date & Time</label>
+                  <input type="text" class="form-control" value="24 Oct • 9:00 AM">
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+                <a href="#page-3" class="btn-secondary">&larr; Back to Discovery</a>
+                <a href="#page-3" class="btn-primary">Continue to Project Details &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="border-color:var(--primary-accent);">
+            <span style="font-size:0.7rem; color:var(--primary-accent); font-weight:bold;">LIVE PREVIEW • RECRUITING</span>
+            
+            <h3 style="margin-top:0.8rem;">Pixel Pioneers</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin:0.5rem 0 1rem;">AI-powered accessibility for live events.</p>
+
+            <div style="font-size:0.75rem; color:var(--text-muted); display:flex; flex-direction:column; gap:0.4rem;">
+              <div>📍 Bengaluru, India</div>
+              <div>📅 24–26 October 2026</div>
+              <div>👥 2 of 5 spots filled</div>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+              <button class="btn-primary" style="width:100%; justify-content:center;" disabled>Request to Join (Preview)</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1rem; text-align:center;">
+            <h4 style="font-size:0.85rem; margin-bottom:0.5rem;">GitHub & Linear Sync</h4>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;">Auto-provision private repositories & sprint epics once squad locks.</p>
+            <a href="#coming-soon" class="btn-secondary" style="display:block;">Connect Repo</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PAGE 6: COMING SOON PAGE (#coming-soon)    -->
+  <!-- ========================================== -->
+  <div id="coming-soon" class="page-section">
+    <header class="header">
+      <a href="#page-1" class="logo">
+        <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+        CREWLYY
+      </a>
+      <ul class="nav-links">
+        <li><a href="#page-3">Discover</a></li>
+        <li><a href="#coming-soon">Features</a></li>
+        <li><a href="#coming-soon">Hackathons</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#page-1" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size:0.82rem; background-color: #ff8a00;">Logout</a>
+      </div>
+    </header>
+
+    <main class="container coming-soon-wrapper">
+      <h1 class="coming-soon-title">COMING SOON</h1>
+    </main>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION MODALS FOR EDITING PROFILE         -->
+  <!-- ========================================== -->
+
+  <!-- 1. EDIT MAIN PROFILE MODAL -->
+  <div id="edit-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit Profile Overview</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-control" value="Alex Morgan">
+        </div>
+        <div class="form-group">
+          <label>Bio Headline</label>
+          <input type="text" class="form-control" value="Full Stack Developer • Open Source Enthusiast">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" class="form-control" value="San Francisco, CA">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Save Changes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. EDIT ABOUT ME MODAL -->
+  <div id="edit-about-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit About Me</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>About Me Bio</label>
+          <textarea class="form-control" rows="5">I am a passionate software developer with 4+ years of experience building responsive web applications. I love prototyping new concepts, optimizing performance, and translating complex designs into robust codebases. In hackathons, I excel at setting up full-stack architecture quickly, integrating APIs, and leading technical workflow.</textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Save Bio</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. EDIT TECHNICAL ARSENAL MODAL -->
+  <div id="edit-arsenal-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit Technical Arsenal</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>Expert Skills (Comma Separated)</label>
+          <input type="text" class="form-control" value="React, TypeScript, Node.js">
+        </div>
+        <div class="form-group">
+          <label>Advanced Skills (Comma Separated)</label>
+          <input type="text" class="form-control" value="Python, Docker, AWS, PostgreSQL">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Update Skills</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. EDIT HACKATHON JOURNEY MODAL -->
+  <div id="edit-journey-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit Hackathon Journey</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>Recent Achievement 1 Title</label>
+          <input type="text" class="form-control" value="Global AI Innovation Summit">
+        </div>
+        <div class="form-group">
+          <label>Award / Position</label>
+          <input type="text" class="form-control" value="🏆 1ST PLACE">
+        </div>
+        <div class="form-group">
+          <label>Achievement Details</label>
+          <textarea class="form-control" rows="2">Architected and deployed a real-time predictive analytics dashboard utilizing generative AI vectors.</textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Save Journey</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. EDIT AVAILABILITY & PREFERENCES MODAL -->
+  <div id="edit-availability-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit Availability & Preferences</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>Preferred Team Size</label>
+          <input type="text" class="form-control" value="3 - 5 Members">
+        </div>
+        <div class="form-group">
+          <label>Timezone</label>
+          <input type="text" class="form-control" value="PST (UTC-8)">
+        </div>
+        <div class="form-group">
+          <label>Weekly Capacity</label>
+          <input type="text" class="form-control" value="25+ HRS / SPRINT">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Save Preferences</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. EDIT CONTACT & CONNECT MODAL -->
+  <div id="edit-contact-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>Edit Contact & Connect Links</h3>
+        <a href="#page-4" style="color:var(--text-muted); font-weight:bold;">✕</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" value="alex.morgan@dev.com">
+        </div>
+        <div class="form-group">
+          <label>GitHub Username / Link</label>
+          <input type="text" class="form-control" value="github.com/alexm-dev">
+        </div>
+        <div class="form-group">
+          <label>LinkedIn Profile Link</label>
+          <input type="text" class="form-control" value="linkedin.com/in/alexm">
+        </div>
+        <div class="form-group">
+          <label>Portfolio URL</label>
+          <input type="text" class="form-control" value="alexmorgan.dev">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+          <a href="#page-4" class="btn-secondary">Cancel</a>
+          <a href="#page-4" class="btn-primary" style="padding: 0.5rem 1rem;">Save Contact Info</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- GLOBAL FOOTER                              -->
+  <!-- ========================================== -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom:1rem;">
+          <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+          CREWLYY
+        </div>
+        <p>High-performance squad curation and elite hackathon matchmaking.</p>
+      </div>
+      <div class="footer-col">
+        <h4>PLATFORM</h4>
+        <ul>
+          <li><a href="#page-3">Discover Squads</a></li>
+          <li><a href="#page-5">Team Rosters</a></li>
+          <li><a href="#coming-soon">Hackathon Arena</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>RESOURCES</h4>
+        <ul>
+          <li><a href="#coming-soon">Builder Playbooks</a></li>
+          <li><a href="#coming-soon">Hackathon Toolkits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>LEGAL & TRUST</h4>
+        <ul>
+          <li><a href="#coming-soon">Security Verifications</a></li>
+          <li><a href="#coming-soon">Terms of Association</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 CREWLYY Architectural Systems Inc. All rights reserved.</div>
+      <div>NODE SYNCED v2.4.0-PROD</div>
+    </div>
+  </footer>
+
+</body>
+</html>
