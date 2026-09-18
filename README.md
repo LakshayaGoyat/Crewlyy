@@ -24,3 +24,5 @@ Open `index.html` directly in a browser, or serve the folder with any static fil
 - Use semantic HTML and accessible labels for new form controls.
 - Add new pages as separate HTML files and reuse shared CSS/JavaScript modules where practical.
 - Keep external dependencies out of the project unless the team agrees otherwise.
+- Test.
+
