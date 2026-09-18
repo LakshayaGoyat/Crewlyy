@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crewlyy workspace authentication">
+  <title>Crewlyy | Workspace Access</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Crewlyy home">
+        <span class="brand-mark" aria-hidden="true">◉</span>
+        <span class="brand-name">CREWLYY</span>
+        <span class="version-tag">V2.4 PROTOCOL</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a class="active" href="#workspace">Workspace</a>
+        <a href="#squad-matrix">Squad Matrix</a>
+        <a href="#challengers">Challengers</a>
+        <a href="#archive">Archive</a>
+      </nav>
+
+      <div class="header-action">
+        <span class="new-team-label">New team?</span>
+        <button class="button button-quiet" type="button" data-action="request-seat">Request Seat</button>
+      </div>
+    </header>
+
+    <main class="auth-layout" id="workspace">
+      <section class="intro-panel" aria-labelledby="intro-title">
+        <div class="eyebrow"><span class="status-dot"></span>GLOBAL HACKATHON MATRIX</div>
+        <h1 id="intro-title">Assemble high-velocity<br>engineering crews.</h1>
+        <p class="intro-copy">Architected for multidisciplinary product teams, technical founders, and elite builder collectives navigating 48-hour sprint cycles.</p>
+
+        <div class="metric-grid" aria-label="Crewlyy platform metrics">
+          <article class="metric-card">
+            <div class="metric-heading">MATCH ACCURACY <span aria-hidden="true">◌</span></div>
+            <strong>98.4<span>%</span></strong>
+            <p>Skill vector alignment</p>
+          </article>
+          <article class="metric-card">
+            <div class="metric-heading">DEPLOY LATENCY <span aria-hidden="true">ϟ</span></div>
+            <strong>&lt; 4<span>m</span></strong>
+            <p>Autonomous squad spin-up</p>
+          </article>
+          <article class="metric-card">
+            <div class="metric-heading">ACTIVE PODS <span aria-hidden="true">⌘</span></div>
+            <strong>1,420</strong>
+            <p>Distributed nodes</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="auth-panel" aria-labelledby="welcome-title">
+        <div class="auth-heading">
+          <div>
+            <p class="eyebrow plain">AUTHENTICATION TERMINAL</p>
+            <h2 id="welcome-title">Welcome back</h2>
+          </div>
+          <span class="security-tag"><span class="status-dot"></span>TLS 1.3</span>
+        </div>
+        <p class="auth-intro">Enter your credentials to enter your creative workspace and squad command matrix.</p>
+
+        <form id="login-form" novalidate>
+          <div class="field-group">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">@</span>
+              <input id="email" name="email" type="email" autocomplete="email" value="m.vance@collective.net" required>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <div class="label-row">
+              <label for="password">Password</label>
+              <button class="text-button" type="button" data-action="forgot-password">Forgot keyphrase?</button>
+            </div>
+            <div class="input-wrap">
+              <span class="input-icon lock-icon" aria-hidden="true">▣</span>
+              <input id="password" name="password" type="password" autocomplete="current-password" value="crewlyy-protocol" required>
+              <button class="password-toggle" type="button" data-action="toggle-password" aria-label="Show password">◉</button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label"><input type="checkbox" checked> <span>Stay authenticated</span></label>
+            <span class="encryption-note">▣ 256 Encrypted</span>
+          </div>
+
+          <button class="button button-primary submit-button" type="submit">Log In to Workspace <span aria-hidden="true">↗</span></button>
+          <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="divider"><span>OR CONNECT VIA</span></div>
+        <button class="button google-button" type="button" data-action="google-login"><span class="google-mark">G</span>Sign in with Google Workspace <span class="arrow" aria-hidden="true">→</span></button>
+
+        <div class="demo-user">
+          <span class="demo-avatar" aria-hidden="true">▣</span>
+          <div><strong>Alex Morgan <span>• LEAD ARCHITECT</span></strong><a href="#demo" data-action="load-demo">Sandbox Demo Mode</a></div>
+          <button class="demo-load" type="button" data-action="load-demo">1-CLICK LOAD</button>
+        </div>
+
+        <p class="signup-prompt">Don't have an established pod? <button class="text-button" type="button" data-action="request-seat">Assemble Crew</button></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>◌ SOC2<br>TYPE II</span><i></i><span>⌘ TERMS OF<br>OPERATION</span><i></i><span>STATION ID: CRW-<br>7749</span>
+    </footer>
+  </div>
+
+  <dialog class="request-dialog" id="request-dialog">
+    <button class="dialog-close" type="button" data-action="close-dialog" aria-label="Close dialog">×</button>
+    <p class="eyebrow plain">NEW TEAM PROTOCOL</p>
+    <h2>Request a seat</h2>
+    <p>Tell the crew where to route your invitation.</p>
+    <form method="dialog" id="seat-form">
+      <label for="seat-email">Work email</label>
+      <input id="seat-email" type="email" placeholder="you@company.com" required>
+      <button class="button button-primary" type="submit">Send request <span aria-hidden="true">↗</span></button>
+    </form>
+  </dialog>
+</body>
+</html>
