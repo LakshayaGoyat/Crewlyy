@@ -11,7 +11,6 @@ Crewlyy/
 │   └── styles.css      # Layout, theme, and responsive styles
 ├── js/
 │   └── main.js         # Small interactions and form behavior
-└── Crewlyy.html        # Original multi-page prototype kept for reference
 ```
 
 ## Run locally
