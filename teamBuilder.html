@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crewlyy - Team Builder Studio">
+  <title>CREWLYY - Team Builder (Desktop)</title>
+  <link rel="stylesheet" href="css/teamBuilder.css">
+  <script src="js/teamBuilder.js" defer></script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP GLOBAL NAVIGATION BAR
+       ======================================================================== -->
+  <header class="tb-navbar">
+    <div class="tb-nav-left">
+      <a href="index.html" class="tb-brand" aria-label="Crewlyy Home">
+        <div class="tb-brand-logo">
+          <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
+        </div>
+        <span class="tb-brand-name">CREWLYY</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="tb-nav-links">
+          <li class="tb-nav-item"><a href="#discover">Discover</a></li>
+          <li class="tb-nav-item"><a href="#how-it-works">How it Works</a></li>
+          <li class="tb-nav-item"><a href="#features">Features</a></li>
+          <li class="tb-nav-item active-box"><a href="#explore-teams">Explore Teams</a></li>
+          <li class="tb-nav-item"><a href="#hackathons">Hackathons</a></li>
+          <li class="tb-nav-item"><a href="#my-requests">My Requests</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="tb-nav-right">
+      <!-- Search Input -->
+      <div class="tb-search-box" role="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="tb-search-input" id="global-search" placeholder="Search teams, projects..." aria-label="Search teams, projects">
+        <kbd class="tb-kbd">⌘ K</kbd>
+      </div>
+
+      <!-- Notifications -->
+      <button class="tb-notification-btn" id="notif-btn" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="tb-notif-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- Create Team Button -->
+      <button class="tb-btn-create-team" id="create-team-btn" type="button">
+        <span>Create</span>
+        <span>Team</span>
+      </button>
+
+      <!-- User Profile -->
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan">
+        <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
+        <div class="tb-user-meta">
+          <span class="tb-user-name">Alex Morgan</span>
+          <span class="tb-user-role">Lead Architect</span>
+        </div>
+        <span class="tb-user-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       SUBHEADER / BREADCRUMB & STATUS BAR
+       ======================================================================== -->
+  <div class="tb-subheader">
+    <div class="tb-breadcrumbs" aria-label="Breadcrumb">
+      <a href="#workspace" class="tb-breadcrumb-item">WORKSPACE</a>
+      <span class="tb-breadcrumb-sep">/</span>
+      <a href="#squads" class="tb-breadcrumb-item">SQUADS</a>
+      <span class="tb-breadcrumb-sep">/</span>
+      <span class="tb-breadcrumb-current">TEAM BUILDER STUDIO</span>
+    </div>
+
+    <div class="tb-subheader-actions">
+      <div class="tb-autosave-indicator" id="autosave-status">
+        <span class="tb-autosave-dot" aria-hidden="true"></span>
+        <span id="autosave-text">Autosaved to Cloud · 14:02 IST</span>
+      </div>
+      <button class="tb-btn-discard" id="btn-discard" type="button">Discard</button>
+      <button class="tb-btn-save-draft" id="btn-save-draft" type="button">Save Draft</button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN THREE-COLUMN LAYOUT
+       ======================================================================== -->
+  <main class="tb-main-container">
+
+    <!-- ==================== COLUMN 1: LEFT SIDEBAR ==================== -->
+    <aside class="tb-col-left">
+      <div>
+        <div class="tb-step-tag">TEAM BUILDER · STEP 01</div>
+        <h1 class="tb-left-title">Bring your idea <em>to life.</em></h1>
+        <p class="tb-left-desc">Complete these five foundational anchors to calibrate your squad, syndicate requirements, and open recruitment.</p>
+      </div>
+
+      <!-- Tip Callout Box -->
+      <section class="tb-tip-card" aria-label="Outcome recommendation">
+        <div class="tb-tip-header">
+          <div class="tb-tip-icon-box" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"></path>
+            </svg>
+          </div>
+          <span class="tb-tip-title">Start with a clear outcome</span>
+        </div>
+        <p class="tb-tip-text">The highest-converting pitches describe the friction point, target attendees, and what a 3-minute winning demo feels like.</p>
+      </section>
+
+      <!-- Team Roster Card -->
+      <section class="tb-roster-card" aria-labelledby="roster-heading">
+        <div class="tb-roster-header">
+          <div class="tb-roster-title-wrap">
+            <h2 id="roster-heading" class="tb-roster-title">Team Roster</h2>
+            <span class="tb-locked-badge" id="roster-locked-badge">2/5 Locked</span>
+          </div>
+          <button type="button" class="tb-roster-edit-icon" id="roster-expand-btn" aria-label="View or expand team roster" style="background:none; border:none;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </button>
+        </div>
+
+        <ul class="tb-roster-list" style="list-style: none;">
+          <!-- Member 1: Alex Morgan -->
+          <li class="tb-roster-item">
+            <div class="tb-member-info">
+              <img src="images/alex_roster.png" alt="Alex Morgan" class="tb-member-avatar">
+              <div class="tb-member-meta">
+                <span class="tb-member-name">Alex Morgan</span>
+                <span class="tb-member-role">Captain · Systems Lead</span>
+              </div>
+            </div>
+            <div class="tb-verified-badge" title="Verified Captain" aria-label="Verified">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" fill="#0c1d42"></circle>
+                <path d="M8 12l2.5 2.5L16 9"></path>
+              </svg>
+            </div>
+          </li>
+
+          <!-- Member 2: Jordan Chen -->
+          <li class="tb-roster-item">
+            <div class="tb-member-info">
+              <img src="images/jordan_roster.png" alt="Jordan Chen" class="tb-member-avatar">
+              <div class="tb-member-meta">
+                <span class="tb-member-name">Jordan Chen</span>
+                <span class="tb-member-role">Core · AI / ML</span>
+              </div>
+            </div>
+            <span class="tb-confirmed-tag">CONFIRMED</span>
+          </li>
+
+          <!-- Vacant Slot 1: Frontend Architect -->
+          <li class="tb-roster-item">
+            <div class="tb-member-info">
+              <div class="tb-vacant-avatar" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+              </div>
+              <div class="tb-member-meta">
+                <span class="tb-vacant-name">Frontend Architect</span>
+                <span class="tb-vacant-sub">Vacant Slot</span>
+              </div>
+            </div>
+            <span class="tb-open-badge" role="button" tabindex="0">OPEN</span>
+          </li>
+
+          <!-- Vacant Slot 2: UI / UX Designer -->
+          <li class="tb-roster-item">
+            <div class="tb-member-info">
+              <div class="tb-vacant-avatar" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+              </div>
+              <div class="tb-member-meta">
+                <span class="tb-vacant-name">UI / UX Designer</span>
+                <span class="tb-vacant-sub">Vacant Slot</span>
+              </div>
+            </div>
+            <span class="tb-open-badge" role="button" tabindex="0">OPEN</span>
+          </li>
+
+          <!-- Vacant Slot 3: Pitch & Demo Specialist -->
+          <li class="tb-roster-item">
+            <div class="tb-member-info">
+              <div class="tb-vacant-avatar" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+              </div>
+              <div class="tb-member-meta">
+                <span class="tb-vacant-name">Pitch &amp; Demo Specialist</span>
+                <span class="tb-vacant-sub">Vacant Slot</span>
+              </div>
+            </div>
+            <span class="tb-open-badge" role="button" tabindex="0">OPEN</span>
+          </li>
+        </ul>
+
+        <!-- Equilibrium Matrix -->
+        <div class="tb-equilibrium-section">
+          <div class="tb-equilibrium-header">
+            <span class="tb-equilibrium-label">Squad Equilibrium</span>
+            <span class="tb-equilibrium-val" id="equilibrium-val">48% Matrix</span>
+          </div>
+          <div class="tb-progress-track">
+            <div class="tb-progress-fill" id="equilibrium-progress"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Decentralized Match Protocol Card -->
+      <section class="tb-protocol-card" aria-label="Decentralized Match Protocol">
+        <div class="tb-protocol-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="tb-protocol-title">DECENTRALIZED MATCH PROTOCOL</div>
+          <p class="tb-protocol-desc">Encrypted candidate pool with zero vanity spam.</p>
+        </div>
+      </section>
+    </aside>
+
+    <!-- ==================== COLUMN 2: CENTER FORM ==================== -->
+    <section class="tb-col-center">
+      <div class="tb-form-card">
+        <header class="tb-form-header">
+          <div class="tb-form-title-wrap">
+            <span class="tb-title-bullet" aria-hidden="true"></span>
+            <h2 class="tb-form-title">Tell us about your team</h2>
+          </div>
+          <p class="tb-form-subtitle">Give elite builders a compelling reason to commit their hackathon sprint to your mission.</p>
+        </header>
+
+        <form id="team-builder-form" novalidate>
+          <!-- Field 1: Team Name -->
+          <div class="tb-form-group">
+            <div class="tb-label-row">
+              <label for="team-name" class="tb-label">Team name</label>
+              <span class="tb-badge-hint">REQUIRED</span>
+            </div>
+            <div class="tb-input-container">
+              <input type="text" id="team-name" name="team-name" class="tb-input" value="Pixel Pioneers" required autocomplete="off">
+              <span class="tb-input-icon" aria-hidden="true">
+                <!-- Wireframe Globe -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </span>
+            </div>
+            <p class="tb-field-hint">Choose something memorable — you can change it anytime before project kickoff.</p>
+          </div>
+
+          <!-- Field 2: What are you building? -->
+          <div class="tb-form-group">
+            <div class="tb-label-row">
+              <label for="elevator-pitch" class="tb-label">What are you building?</label>
+              <span class="tb-badge-hint">ELEVATOR PITCH</span>
+            </div>
+            <div class="tb-input-container">
+              <input type="text" id="elevator-pitch" name="elevator-pitch" class="tb-input" value="An AI-powered accessibility copilot for live events" required autocomplete="off">
+              <span class="tb-input-icon" aria-hidden="true">
+                <!-- Lightning Bolt -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Field 3: Project Description -->
+          <div class="tb-form-group">
+            <div class="tb-label-row">
+              <label for="project-desc" class="tb-label">Project description</label>
+              <span class="tb-badge-hint" id="char-counter">184 / 500</span>
+            </div>
+            <div class="tb-textarea-container">
+              <textarea id="project-desc" name="project-desc" class="tb-textarea" rows="3" maxlength="500">We're making real-time captions, audio cues, and venue guidance work together in one simple mobile experience. Our goal is an inclusive event companion we can demo by Sunday.</textarea>
+            </div>
+          </div>
+
+          <!-- Tip Line Banner -->
+          <div class="tb-form-tip-banner">
+            <span class="tb-form-tip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="9" y1="18" x2="15" y2="18"></line>
+                <line x1="10" y1="22" x2="14" y2="22"></line>
+                <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+              </svg>
+            </span>
+            <span class="tb-form-tip-text">Focus on live hardware or real-time SDK hooks to stand out to adjudicators.</span>
+          </div>
+
+          <!-- Field 4: Skills your crew needs -->
+          <div class="tb-form-group">
+            <div class="tb-label-row">
+              <span class="tb-label">Skills your crew needs</span>
+              <span class="tb-badge-hint" id="active-tags-badge">4 ACTIVE TAGS</span>
+            </div>
+            <div class="tb-skills-container" id="skills-container">
+              <span class="tb-skill-tag" data-skill="React">
+                React <span class="tb-tag-remove" role="button" aria-label="Remove React">✕</span>
+              </span>
+              <span class="tb-skill-tag" data-skill="UI/UX Design">
+                UI/UX Design <span class="tb-tag-remove" role="button" aria-label="Remove UI/UX Design">✕</span>
+              </span>
+              <span class="tb-skill-tag" data-skill="AI / ML">
+                AI / ML <span class="tb-tag-remove" role="button" aria-label="Remove AI / ML">✕</span>
+              </span>
+              <span class="tb-skill-tag" data-skill="Pitching">
+                Pitching <span class="tb-tag-remove" role="button" aria-label="Remove Pitching">✕</span>
+              </span>
+              <span class="tb-skill-tag amber-highlight" data-skill="Web Audio API">
+                Web Audio API <span class="tb-tag-remove" role="button" aria-label="Remove Web Audio API">✕</span>
+              </span>
+              <button type="button" class="tb-btn-add-skill" id="btn-add-skill">
+                + Add a skill
+              </button>
+            </div>
+            <p class="tb-field-hint">Recommended: Add at least 1 design, 2 engineering, and 1 strategy skill token.</p>
+          </div>
+
+          <!-- Field 5: Location & Date (2 columns) -->
+          <div class="tb-form-row-2col">
+            <div>
+              <label for="hackathon-location" class="tb-label" style="display:block; margin-bottom:6px;">Hackathon location</label>
+              <div class="tb-input-container">
+                <span class="tb-input-icon" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </span>
+                <input type="text" id="hackathon-location" name="hackathon-location" class="tb-input" value="Bengaluru, India" autocomplete="off">
+              </div>
+            </div>
+
+            <div>
+              <label for="hackathon-date" class="tb-label" style="display:block; margin-bottom:6px;">Date &amp; time</label>
+              <div class="tb-input-container">
+                <span class="tb-input-icon" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </span>
+                <input type="text" id="hackathon-date" name="hackathon-date" class="tb-input" value="24 Oct · 9:00 AM" autocomplete="off">
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Form Actions -->
+          <div class="tb-form-actions">
+            <button type="button" class="tb-btn-back" id="btn-back">
+              <span aria-hidden="true">←</span> Back to Discovery
+            </button>
+            <button type="submit" class="tb-btn-continue" id="btn-continue">
+              Continue to Project Details <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- GitHub & Linear Sync Card -->
+      <section class="tb-sync-card" aria-label="Repository Integration">
+        <div class="tb-sync-left">
+          <div class="tb-sync-icon-box" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="15"></line>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="tb-sync-title">GitHub &amp; Linear Sync</h3>
+            <p class="tb-sync-sub">Auto-provision private repositories &amp; sprint epics once squad locks.</p>
+          </div>
+        </div>
+        <button type="button" class="tb-btn-connect-repo" id="btn-connect-repo">Connect Repo</button>
+      </section>
+    </section>
+
+    <!-- ==================== COLUMN 3: RIGHT PREVIEW ==================== -->
+    <aside class="tb-col-right">
+      <!-- Tabs -->
+      <div class="tb-preview-tabs" role="tablist">
+        <button type="button" class="tb-tab-item active" id="tab-live-preview" role="tab" aria-selected="true" style="background:none; border:none;">
+          LIVE PREVIEW <span class="tb-tab-dot" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="tb-tab-item" id="tab-draft-spec" role="tab" aria-selected="false" style="background:none; border:none;">
+          DRAFT SPEC
+        </button>
+      </div>
+
+      <!-- Live Preview Card -->
+      <div class="tb-live-preview-card" id="live-preview-box">
+        <div class="tb-preview-top-row">
+          <div class="tb-preview-logo-box" aria-hidden="true">
+            <img src="images/preview_badge.png" alt="Squad Sparkle Badge" width="30" height="30" style="border-radius:5px;">
+          </div>
+          <div class="tb-recruiting-badge">
+            <span class="tb-recruiting-dot" aria-hidden="true"></span>
+            <span>RECRUITING</span>
+          </div>
+        </div>
+
+        <h3 class="tb-preview-name" id="preview-title">Pixel Pioneers</h3>
+        <p class="tb-preview-tagline" id="preview-tagline">AI-powered accessibility for live events.</p>
+
+        <div class="tb-preview-meta-list">
+          <div class="tb-preview-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span id="preview-location">Bengaluru, India</span>
+          </div>
+          <div class="tb-preview-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span id="preview-date">24–26 October 2026</span>
+          </div>
+          <div class="tb-preview-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>2 of 5 spots filled</span>
+          </div>
+        </div>
+
+        <div class="tb-preview-members-row">
+          <div class="tb-preview-avatar-stack">
+            <img src="images/alex_roster.png" alt="Alex Morgan" class="tb-stack-avatar">
+            <img src="images/jordan_roster.png" alt="Jordan Chen" class="tb-stack-avatar">
+            <div class="tb-stack-count">+3</div>
+          </div>
+          <span class="tb-preview-spots-open">3 spots open</span>
+        </div>
+
+        <button type="button" class="tb-btn-request-join" disabled>
+          Request to Join (Preview)
+        </button>
+      </div>
+
+      <!-- Join Requests Card -->
+      <section class="tb-join-requests-card" aria-labelledby="join-requests-heading">
+        <div class="tb-join-header">
+          <h3 id="join-requests-heading" class="tb-join-title">Join requests</h3>
+          <label class="tb-toggle-switch" aria-label="Toggle join requests">
+            <input type="checkbox" id="join-requests-toggle" checked>
+            <span class="tb-toggle-slider"></span>
+          </label>
+        </div>
+        <p class="tb-join-desc">
+          Let hackers request a spot. You'll review portfolios and approve each builder before they join the repository.
+        </p>
+      </section>
+
+      <!-- Guarantee Card -->
+      <section class="tb-guarantee-card" aria-label="Crewlyy Verified Guarantee">
+        <div class="tb-guarantee-header">
+          <div class="tb-guarantee-icon" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <span class="tb-guarantee-title">CREWLYY VERIFIED GUARANTEE</span>
+        </div>
+        <p class="tb-guarantee-desc">
+          Teams that detail their tech stack within 12 hours of publishing receive 3.4x more verified high-ranking builders.
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <!-- ========================================================================
+       GLOBAL FOOTER
+       ======================================================================== -->
+  <footer class="tb-footer">
+    <div class="tb-footer-content">
+      <div class="tb-footer-grid">
+        <!-- Brand Column -->
+        <div class="tb-footer-brand-col">
+          <div class="tb-footer-logo-row">
+            <img src="images/robot_logo.png" alt="Crewlyy Robot" width="22" height="22">
+            <span class="tb-footer-brand-name">CREWLYY</span>
+          </div>
+          <p class="tb-footer-desc">
+            High-performance squad curation and elite hackathon matchmaking. Designed for technical founders, systems architects, and ambitious builders.
+          </p>
+          <div class="tb-node-status-row">
+            <div class="tb-node-tag">
+              <span class="tb-node-dot" aria-hidden="true"></span>
+              <span>NODE SYNCED</span>
+            </div>
+            <span class="tb-node-ver">v2.4.0-PROD</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Platform -->
+        <div class="tb-footer-col">
+          <h4>PLATFORM</h4>
+          <ul class="tb-footer-links">
+            <li><a href="#discover-squads">Discover Squads</a></li>
+            <li><a href="#team-rosters">Team Rosters</a></li>
+            <li><a href="#hackathon-arena">Hackathon Arena</a></li>
+            <li><a href="#skill-matching">Skill Matching Engine</a></li>
+            <li><a href="#protocol-mechanics">Protocol Mechanics</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Resources -->
+        <div class="tb-footer-col">
+          <h4>RESOURCES</h4>
+          <ul class="tb-footer-links">
+            <li><a href="#builder-playbooks">Builder Playbooks</a></li>
+            <li><a href="#hackathon-toolkits">Hackathon Toolkits</a></li>
+            <li><a href="#architecture-vitrine">Architecture Vitrine</a></li>
+            <li><a href="#api-integration">API Integration</a></li>
+            <li><a href="#telemetry-stats">Telemetry &amp; Stats</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Legal & Trust -->
+        <div class="tb-footer-col">
+          <h4>LEGAL &amp; TRUST</h4>
+          <ul class="tb-footer-links">
+            <li><a href="#security-verifications">Security Verifications</a></li>
+            <li><a href="#terms-association">Terms of Association</a></li>
+            <li><a href="#privacy-framework">Privacy Framework</a></li>
+            <li><a href="#escrow-protocol">Escrow Protocol</a></li>
+            <li><a href="#code-conduct">Code of Conduct</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tb-footer-bottom">
+        <span>© 2025 CREWLYY Architectural Systems Inc. All rights reserved.</span>
+        <span>Depths Navy • Aster Flower • Habañero Core</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification element -->
+  <div class="tb-toast" id="tb-toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

@@ -6,12 +6,15 @@ Static HTML/CSS/JavaScript reference implementation for the Crewlyy workspace ac
 
 ```text
 Crewlyy/
-├── index.html          # Current reference page
+├── index.html          # Workspace authentication and access portal
+├── teamBuilder.html    # Team Builder Studio page (Step 01: Squad builder & recruitment)
 ├── css/
-│   └── styles.css      # Layout, theme, and responsive styles
+│   ├── styles.css      # Authentication and global base styles
+│   └── teamBuilder.css # Team Builder Studio layout, cards, and theme
 ├── js/
-│   └── main.js         # Small interactions and form behavior
-└── Crewlyy.html        # Original multi-page prototype kept for reference
+│   ├── main.js         # Authentication interactions and workspace handoff
+│   └── teamBuilder.js  # Live preview sync, tag management, drafts, and shortcuts
+└── images/             # Team Builder brand assets and member avatars
 ```
 
 ## Run locally
