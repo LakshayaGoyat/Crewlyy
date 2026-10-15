@@ -11,11 +11,9 @@ Crewlyy/
 ├── explore-teams.html    # Alias redirecting to squad-matrix.html
 ├── assets/               # Squad and platform SVG vector graphics
 ├── css/
-│   ├── styles.css        # Layout and styles for Workspace Access (index.html)
-│   └── squad-matrix.css  # Layout, theme, and components for Squad Matrix (squad-matrix.html)
-└── js/
-    ├── main.js           # Form handling and interactions for Workspace Access
-    └── squad-matrix.js   # Dynamic role filtering, search, pagination, and modals
+│   └── styles.css      # Layout, theme, and responsive styles
+├── js/
+│   └── main.js         # Small interactions and form behavior
 ```
 
 ## Run locally
