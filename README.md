@@ -12,9 +12,7 @@ Crewlyy/
 │   ├── styles.css      # Authentication and global base styles
 │   └── teamBuilder.css # Team Builder Studio layout, cards, and theme
 ├── js/
-│   ├── main.js         # Authentication interactions and workspace handoff
-│   └── teamBuilder.js  # Live preview sync, tag management, drafts, and shortcuts
-└── images/             # Team Builder brand assets and member avatars
+│   └── main.js         # Small interactions and form behavior
 ```
 
 ## Run locally
