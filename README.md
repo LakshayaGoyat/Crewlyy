@@ -11,7 +11,8 @@ Crewlyy/
 ├── explore-teams.html    # Alias redirecting to squad-matrix.html
 ├── assets/               # Squad and platform SVG vector graphics
 ├── css/
-│   └── styles.css      # Layout, theme, and responsive styles
+│   ├── styles.css      # Authentication and global base styles
+│   └── teamBuilder.css # Team Builder Studio layout, cards, and theme
 ├── js/
 │   └── main.js         # Small interactions and form behavior
 ```
