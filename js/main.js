@@ -52,8 +52,8 @@ loginForm.addEventListener('submit', (event) => {
     loginForm.reportValidity();
     return;
   }
-  showMessage('Access request accepted. Launching Workspace Studio...');
+  showMessage('Access request accepted. Redirecting to Squad Matrix...');
   setTimeout(() => {
-    window.location.href = 'teamBuilder.html';
+    window.location.href = 'squad-matrix.html';
   }, 600);
 });
