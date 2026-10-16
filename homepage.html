@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CREWLYY - Home</title>
+  <link rel="stylesheet" href="css/navbar.css">
+  <script src="js/navbar.js" defer></script>
   <style>
     :root {
       --bg-dark: #070919;
@@ -90,25 +91,67 @@
 </head>
 <body>
 
-  <header class="header">
-    <a href="index.html" class="logo">
-      <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
-      CREWLYY
-    </a>
-    <ul class="nav-links">
-      <li><a href="discover.html" class="discover-pill">Discover</a></li>
-      <li><a href="coming-soon.html">Features</a></li>
-      <li><a href="coming-soon.html">Hackathons</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="login.html" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size:0.82rem;">Sign In</a>
+  <!-- Top Global Navigation Bar -->
+  <header class="tb-navbar">
+    <div class="tb-nav-left">
+      <a href="homepage.html" class="tb-brand" aria-label="Crewlyy Home">
+        <div class="tb-brand-logo">
+          <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
+        </div>
+        <span class="tb-brand-name">CREWLYY</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="tb-nav-links">
+          <li class="tb-nav-item active-box"><a href="homepage.html">Discover</a></li>
+          <li class="tb-nav-item"><a href="#features">How it Works</a></li>
+          <li class="tb-nav-item"><a href="#features">Features</a></li>
+        
+        </ul>
+      </nav>
     </div>
+
+    <div class="tb-nav-right">
+      <!-- Search Input -->
+      <!-- <div class="tb-search-box" role="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="tb-search-input" id="global-search" placeholder="Search teams, projects..." aria-label="Search teams, projects">
+        <kbd class="tb-kbd">⌘ K</kbd>
+      </div> -->
+
+      <!-- Notifications -->
+      <button class="tb-notification-btn" id="notif-btn" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="tb-notif-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- Create Team Button -->
+      <button class="tb-btn-create-team" id="create-team-btn" type="button" onclick="window.location.href='login.html'">
+        Sign In
+      </button>
+
+      <!-- User Profile
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan" onclick="window.location.href='profile.html'">
+        <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
+        <div class="tb-user-meta">
+          <span class="tb-user-name">Alex Morgan</span>
+          <span class="tb-user-role">Lead Architect</span>
+        </div>
+        <span class="tb-user-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </div> -->
   </header>
 
   <main class="container">
     <section class="hero">
       <div class="hero-badge">
-        <span class="dot"></span> FORM THE ULTIMATE TEAM / ARCHITECT MATRIX v2.4
+        <span class="dot"></span> Find Your Crew
       </div>
       
       <h1>Ready for <i>Hackathons?</i><br>Assemble Your <span class="highlight">Dream Crew</span>.</h1>

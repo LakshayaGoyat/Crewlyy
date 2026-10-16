@@ -170,7 +170,7 @@ input, select {
   transition: all 0.18s ease;
 }
 
-.nav-link:hover {
+.nav-link:hover { 
   color: #ffffff;
 }
 

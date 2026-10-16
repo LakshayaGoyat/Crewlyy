@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crewlyy - Alex Morgan Developer Profile">
+  <title>CREWLYY - Alex Morgan Profile (Desktop)</title>
+
+  <!-- Google Fonts matching design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/profile.css">
+
+  <!-- Scripts -->
+  <script src="js/navbar.js" defer></script>
+  <script src="js/profile.js" defer></script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP GLOBAL NAVIGATION BAR (Consistent across all pages)
+       ======================================================================== -->
+  <header class="tb-navbar">
+    <div class="tb-nav-left">
+      <a href="homepage.html" class="tb-brand" aria-label="Crewlyy Home">
+        <div class="tb-brand-logo">
+          <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
+        </div>
+        <span class="tb-brand-name">CREWLYY</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="tb-nav-links">
+          <li class="tb-nav-item"><a href="homepage.html">Discover</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">How it Works</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">Features</a></li>
+          <li class="tb-nav-item"><a href="squad-matrix.html">Explore Teams</a></li>
+          <!-- <li class="tb-nav-item"><a href="squad-matrix.html#hackathons">Hackathons</a></li> -->
+          <li class="tb-nav-item"><a href="teamBuilder.html#my-requests">My Requests</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="tb-nav-right">
+      <!-- Search Input -->
+      <div class="tb-search-box" role="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="tb-search-input" id="global-search" placeholder="Search teams, projects..." aria-label="Search teams, projects">
+        <kbd class="tb-kbd">⌘ K</kbd>
+      </div>
+
+      <!-- Notifications -->
+      <button class="tb-notification-btn" id="notif-btn" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="tb-notif-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- Create Team Button -->
+      <button class="tb-btn-create-team" id="create-team-btn" type="button" onclick="window.location.href='teamBuilder.html'">
+        Create Team
+      </button>
+
+      <!-- User Profile Dropdown Pill -->
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan" onclick="window.location.href='profile.html'">
+        <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
+        <div class="tb-user-meta">
+          <span class="tb-user-name">Alex Morgan</span>
+          <span class="tb-user-role">Lead Architect</span>
+        </div>
+        <span class="tb-user-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       MAIN PROFILE CONTENT WRAPPER
+       ======================================================================== -->
+  <main class="profile-wrapper">
+
+    <!-- Top Profile Hero Card -->
+    <section class="profile-hero-card" aria-label="Profile Header">
+      <div class="profile-hero-left">
+        <!-- Avatar with Camera Badge -->
+        <div class="profile-avatar-box">
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=320&q=80"
+            onerror="this.src='images/alex_roster.png'"
+            alt="Alex Morgan Profile Photo"
+            class="profile-avatar-img"
+            id="profile-avatar-img"
+          >
+          <button type="button" class="profile-avatar-camera-btn" id="avatar-camera-btn" aria-label="Change profile photo" title="Upload new photo">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </button>
+          <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Hero Details -->
+        <div class="profile-hero-details">
+          <div class="profile-name-row">
+            <h1 class="profile-user-name" id="display-name">Alex Morgan</h1>
+            <button type="button" class="profile-edit-name-btn" id="btn-edit-name" aria-label="Edit name">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+
+            <!-- Status Pill Dropdown -->
+            <div class="profile-status-dropdown-wrap">
+              <div class="profile-status-pill" id="profile-status-pill" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" title="Click to change status">
+                <span class="profile-status-dot" id="profile-status-dot"></span>
+                <span id="profile-status-text">AVAILABLE</span>
+                <span class="profile-status-chevron" aria-hidden="true">⌄</span>
+              </div>
+
+              <!-- Status Selection Menu -->
+              <div class="profile-status-menu" id="profile-status-menu" role="menu">
+                <div class="profile-status-option" data-status="AVAILABLE" role="menuitem">
+                  <span class="dot" style="background:#22c55e;"></span> Available
+                </div>
+                <div class="profile-status-option" data-status="IN SPRINT" role="menuitem">
+                  <span class="dot" style="background:#f59e0b;"></span> In Sprint
+                </div>
+                <div class="profile-status-option" data-status="OPEN TO OFFERS" role="menuitem">
+                  <span class="dot" style="background:#00b8f0;"></span> Open to Offers
+                </div>
+                <div class="profile-status-option" data-status="BUSY" role="menuitem">
+                  <span class="dot" style="background:#ef4444;"></span> Busy
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-headline" id="display-headline">
+            Full Stack Developer • Open Source Enthusiast
+          </div>
+
+          <div class="profile-meta-row">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span id="display-location">San Francisco, CA</span>
+            <span class="profile-bullet">•</span>
+            <span class="profile-verified-badge">SYSTEM ARCHITECT VERIFIED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Profile Button -->
+      <button type="button" class="profile-btn-edit-main" id="btn-edit-profile-main">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit Profile
+      </button>
+    </section>
+
+    <!-- Two-Column Layout -->
+    <div class="profile-grid">
+
+      <!-- ==================== COLUMN 1: LEFT SIDEBAR ==================== -->
+      <div class="profile-col-left">
+
+        <!-- Card: Availability & Preferences -->
+        <section class="profile-card" aria-labelledby="pref-heading">
+          <header class="profile-card-header">
+            <div class="profile-card-title-group">
+              <span class="profile-card-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+              </span>
+              <h2 id="pref-heading" class="profile-card-title">Availability &amp; Preferences</h2>
+            </div>
+            <button type="button" class="profile-card-edit-btn" id="btn-edit-pref" aria-label="Edit Availability &amp; Preferences">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="pref-list">
+            <div class="pref-row">
+              <span class="pref-label">Preferred Team Size</span>
+              <span class="pref-val" id="display-team-size">3 - 5 Members</span>
+            </div>
+            <div class="pref-row">
+              <span class="pref-label">Timezone</span>
+              <span class="pref-val" id="display-timezone">PST (UTC-8)</span>
+            </div>
+            <div class="pref-row">
+              <span class="pref-label">Weekly Capacity</span>
+              <span class="pref-pill-badge" id="display-capacity">25+ HRS / SPRINT</span>
+            </div>
+
+            <div class="pref-roles-section">
+              <div class="pref-roles-title">PREFERRED ROLES</div>
+              <div class="pref-roles-tags">
+                <span class="pref-role-tag">Frontend</span>
+                <span class="pref-role-tag">Backend</span>
+                <span class="pref-role-tag">Full Stack</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Card: Contact & Connect -->
+        <section class="profile-card" aria-labelledby="contact-heading">
+          <header class="profile-card-header">
+            <div class="profile-card-title-group">
+              <span class="profile-card-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+                </svg>
+              </span>
+              <h2 id="contact-heading" class="profile-card-title">Contact &amp; Connect</h2>
+            </div>
+            <button type="button" class="profile-card-edit-btn" id="btn-edit-contact" aria-label="Edit Contact &amp; Connect">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="contact-list">
+            <!-- Email -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>Email</span>
+              </div>
+              <a href="mailto:alex.morgan@dev.com" class="contact-link" id="display-email">alex.morgan@dev.com</a>
+            </div>
+
+            <!-- Phone -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>Phone</span>
+              </div>
+              <a href="tel:+15550192831" class="contact-link" id="display-phone">+1 (555) 019-2831</a>
+            </div>
+
+            <!-- GitHub -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                <span>GitHub</span>
+              </div>
+              <a href="https://github.com/alexm-dev" target="_blank" rel="noopener noreferrer" class="contact-link" id="display-github">github.com/alexm-dev</a>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                <span>LinkedIn</span>
+              </div>
+              <a href="https://linkedin.com/in/alexm" target="_blank" rel="noopener noreferrer" class="contact-link" id="display-linkedin">linkedin.com/in/alexm</a>
+            </div>
+
+            <!-- Twitter/X -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                </svg>
+                <span>Twitter/X</span>
+              </div>
+              <a href="https://twitter.com/alexm_codes" target="_blank" rel="noopener noreferrer" class="contact-link" id="display-twitter">@alexm_codes</a>
+            </div>
+
+            <!-- Portfolio -->
+            <div class="contact-row">
+              <div class="contact-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span>Portfolio</span>
+              </div>
+              <a href="https://alexmorgan.dev" target="_blank" rel="noopener noreferrer" class="contact-link" id="display-portfolio">alexmorgan.dev</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Card: Stats Bar -->
+        <section class="profile-stats-card" aria-label="Hackathon Statistics">
+          <div class="stat-item">
+            <span class="stat-number">14</span>
+            <span class="stat-label">HACKATHONS</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">8</span>
+            <span class="stat-label">PODIUMS</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">99.4%</span>
+            <span class="stat-label">RELIABILITY</span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ==================== COLUMN 2: RIGHT MAIN CONTENT ==================== -->
+      <div class="profile-col-right">
+
+        <!-- Card: About Me -->
+        <section class="profile-card" aria-labelledby="about-heading">
+          <header class="profile-card-header">
+            <div class="profile-card-title-group has-subtitle">
+              <h2 id="about-heading" class="profile-card-title-lg">About Me</h2>
+              <span class="profile-card-subtitle">HACKATHON FOCUS &amp; BACKGROUND</span>
+            </div>
+            <button type="button" class="profile-card-edit-btn" id="btn-edit-about" aria-label="Edit About Me">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="about-content">
+            <p id="display-bio-1">
+              I am a passionate software developer with 4+ years of experience building responsive web applications. I love prototyping new concepts, optimizing performance, and translating complex designs into robust codebases.
+            </p>
+            <p id="display-bio-2">
+              In hackathons, I excel at setting up the full-stack architecture quickly, integrating complex APIs, and leading the technical workflow. I am currently looking for UI/UX designers and machine learning specialists to team up for upcoming AI-focused hackathons. Let's build something extraordinary!
+            </p>
+          </div>
+        </section>
+
+        <!-- Card: Technical Arsenal -->
+        <section class="profile-card" aria-labelledby="arsenal-heading">
+          <header class="profile-card-header">
+            <div class="profile-card-title-group has-subtitle">
+              <h2 id="arsenal-heading" class="profile-card-title-lg">Technical Arsenal</h2>
+              <span class="profile-card-subtitle">EXPERTISE &amp; PROFICIENCY INDICATORS</span>
+            </div>
+            <button type="button" class="profile-card-edit-btn" id="btn-edit-arsenal" aria-label="Edit Technical Arsenal">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="arsenal-grid" id="arsenal-tags-container">
+            <div class="arsenal-badge">React <span class="arsenal-pill expert">EXPERT</span></div>
+            <div class="arsenal-badge">TypeScript <span class="arsenal-pill expert">EXPERT</span></div>
+            <div class="arsenal-badge">Node.js <span class="arsenal-pill expert">EXPERT</span></div>
+            <div class="arsenal-badge">Python <span class="arsenal-pill advanced">ADVANCED</span></div>
+            <div class="arsenal-badge">Docker <span class="arsenal-pill advanced">ADVANCED</span></div>
+            <div class="arsenal-badge">AWS <span class="arsenal-pill advanced">ADVANCED</span></div>
+            <div class="arsenal-badge">PostgreSQL <span class="arsenal-pill advanced">ADVANCED</span></div>
+            <div class="arsenal-badge">GraphQL <span class="arsenal-pill intermediate">INTERMEDIATE</span></div>
+            <div class="arsenal-badge">Figma <span class="arsenal-pill intermediate">INTERMEDIATE</span></div>
+            <div class="arsenal-badge">Git <span class="arsenal-pill expert">EXPERT</span></div>
+          </div>
+        </section>
+
+        <!-- Card: Hackathon Journey -->
+        <section class="profile-card" aria-labelledby="journey-heading">
+          <header class="profile-card-header">
+            <div class="profile-card-title-group has-subtitle">
+              <h2 id="journey-heading" class="profile-card-title-lg">Hackathon Journey</h2>
+              <span class="profile-card-subtitle">PAST MILESTONES &amp; ACCOMPLISHMENTS</span>
+            </div>
+            <button type="button" class="profile-card-edit-btn" id="btn-edit-journey" aria-label="Edit Hackathon Journey">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="journey-list">
+            <!-- Milestone 1 -->
+            <article class="journey-item">
+              <div class="journey-icon-box" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+              </div>
+              <div class="journey-content">
+                <div class="journey-header-row">
+                  <div>
+                    <h3 class="journey-title">Global AI Innovation Summit</h3>
+                    <p class="journey-role">Lead Full Stack Developer</p>
+                    <p class="journey-desc">Architected and deployed a real-time predictive analytics dashboard utilizing generative AI vectors.</p>
+                  </div>
+                  <div class="journey-meta-right">
+                    <span class="journey-date">OCTOBER 2025</span>
+                    <span class="award-badge first-place">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="12" cy="8" r="6"></circle>
+                        <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+                      </svg>
+                      1ST PLACE
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Milestone 2 -->
+            <article class="journey-item">
+              <div class="journey-icon-box" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                  <path d="M4 22h16"></path>
+                  <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34"></path>
+                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
+                </svg>
+              </div>
+              <div class="journey-content">
+                <div class="journey-header-row">
+                  <div>
+                    <h3 class="journey-title">Devpost Web3 Hack</h3>
+                    <p class="journey-role">Smart Contract &amp; Frontend Dev</p>
+                    <p class="journey-desc">Integrated zero-knowledge proof verification protocols with a clean React user workspace.</p>
+                  </div>
+                  <div class="journey-meta-right">
+                    <span class="journey-date">JUNE 2025</span>
+                    <span class="award-badge runner-up">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                      RUNNER UP
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Milestone 3 -->
+            <article class="journey-item">
+              <div class="journey-icon-box" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <div class="journey-content">
+                <div class="journey-header-row">
+                  <div>
+                    <h3 class="journey-title">Bay Area CodeFest</h3>
+                    <p class="journey-role">Frontend Architect</p>
+                    <p class="journey-desc">Engineered high-concurrency real-time WebSocket state synchronizer for distributed collaboration.</p>
+                  </div>
+                  <div class="journey-meta-right">
+                    <span class="journey-date">MARCH 2025</span>
+                    <span class="award-badge finalist">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                      TOP 5 FINALIST
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       GLOBAL FOOTER (Exact Match with Figma Design)
+       ======================================================================== -->
+  <footer class="profile-footer">
+    <div class="profile-footer-content">
+      <div class="profile-footer-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="profile-footer-brand-col">
+          <div class="profile-footer-logo-row">
+            <img src="images/robot_logo.png" alt="Crewlyy Robot Mascot" width="22" height="22">
+            <span class="profile-footer-brand-name">CREWLYY</span>
+          </div>
+          <p class="profile-footer-desc">
+            High-performance squad curation and elite hackathon matchmaking. Designed for technical founders, systems architects, and ambitious builders.
+          </p>
+          <div class="profile-node-status-row">
+            <div class="profile-node-tag">
+              <span class="profile-node-dot" aria-hidden="true"></span>
+              <span>NODE SYNCED</span>
+            </div>
+            <span class="profile-node-ver">v2.4.0-PROD</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Platform -->
+        <div class="profile-footer-col">
+          <h4>PLATFORM</h4>
+          <ul class="profile-footer-links">
+            <li><a href="squad-matrix.html">Discover Squads</a></li>
+            <li><a href="teamBuilder.html">Team Rosters</a></li>
+            <li><a href="squad-matrix.html#hackathons">Hackathon Arena</a></li>
+            <li><a href="squad-matrix.html#skills">Skill Matching Engine</a></li>
+            <li><a href="homepage.html#protocol">Protocol Mechanics</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Resources -->
+        <div class="profile-footer-col">
+          <h4>RESOURCES</h4>
+          <ul class="profile-footer-links">
+            <li><a href="#playbooks">Builder Playbooks</a></li>
+            <li><a href="#toolkits">Hackathon Toolkits</a></li>
+            <li><a href="#vitrine">Architecture Vitrine</a></li>
+            <li><a href="#api">API Integration</a></li>
+            <li><a href="#telemetry">Telemetry &amp; Stats</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Legal & Trust -->
+        <div class="profile-footer-col">
+          <h4>LEGAL &amp; TRUST</h4>
+          <ul class="profile-footer-links">
+            <li><a href="#security">Security Verifications</a></li>
+            <li><a href="#terms">Terms of Association</a></li>
+            <li><a href="#privacy">Privacy Framework</a></li>
+            <li><a href="#escrow">Escrow Protocol</a></li>
+            <li><a href="#conduct">Code of Conduct</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="profile-footer-bottom">
+        <span>© 2025 CREWLYY Architectural Systems Inc. All rights reserved.</span>
+        <span>Depths Navy • Aster Flower • Habañero Core</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODAL: EDIT PROFILE
+       ======================================================================== -->
+  <div class="modal-overlay" id="edit-profile-modal" role="dialog" aria-modal="true" aria-labelledby="modal-profile-title">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-profile-title">Edit Developer Profile</h2>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="modal-profile-form" novalidate>
+        <div class="modal-body">
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-name" class="modal-label">Full Name</label>
+              <input type="text" id="input-name" class="modal-input" required>
+            </div>
+            <div class="modal-form-group">
+              <label for="input-status" class="modal-label">Availability Status</label>
+              <select id="input-status" class="modal-select">
+                <option value="AVAILABLE">AVAILABLE</option>
+                <option value="IN SPRINT">IN SPRINT</option>
+                <option value="OPEN TO OFFERS">OPEN TO OFFERS</option>
+                <option value="BUSY">BUSY</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="input-headline" class="modal-label">Headline / Title</label>
+            <input type="text" id="input-headline" class="modal-input" placeholder="Full Stack Developer • Open Source Enthusiast" required>
+          </div>
+
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-location" class="modal-label">Location</label>
+              <input type="text" id="input-location" class="modal-input" placeholder="San Francisco, CA">
+            </div>
+            <div class="modal-form-group">
+              <label for="input-capacity" class="modal-label">Weekly Capacity</label>
+              <input type="text" id="input-capacity" class="modal-input" placeholder="25+ HRS / SPRINT">
+            </div>
+          </div>
+
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-team-size" class="modal-label">Preferred Team Size</label>
+              <input type="text" id="input-team-size" class="modal-input" placeholder="3 - 5 Members">
+            </div>
+            <div class="modal-form-group">
+              <label for="input-timezone" class="modal-label">Timezone</label>
+              <input type="text" id="input-timezone" class="modal-input" placeholder="PST (UTC-8)">
+            </div>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="input-bio" class="modal-label">About Me (Bio)</label>
+            <textarea id="input-bio" class="modal-textarea" rows="4"></textarea>
+          </div>
+
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-email" class="modal-label">Email</label>
+              <input type="email" id="input-email" class="modal-input">
+            </div>
+            <div class="modal-form-group">
+              <label for="input-phone" class="modal-label">Phone</label>
+              <input type="text" id="input-phone" class="modal-input">
+            </div>
+          </div>
+
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-github" class="modal-label">GitHub</label>
+              <input type="text" id="input-github" class="modal-input">
+            </div>
+            <div class="modal-form-group">
+              <label for="input-linkedin" class="modal-label">LinkedIn</label>
+              <input type="text" id="input-linkedin" class="modal-input">
+            </div>
+          </div>
+
+          <div class="modal-row-2">
+            <div class="modal-form-group">
+              <label for="input-twitter" class="modal-label">Twitter / X</label>
+              <input type="text" id="input-twitter" class="modal-input">
+            </div>
+            <div class="modal-form-group">
+              <label for="input-portfolio" class="modal-label">Portfolio Domain</label>
+              <input type="text" id="input-portfolio" class="modal-input">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="modal-btn-cancel" id="modal-cancel-btn">Cancel</button>
+          <button type="submit" class="modal-btn-save">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alert -->
+  <div class="profile-toast" id="profile-toast" role="status" aria-live="polite">
+    <span class="profile-toast-icon">✓</span>
+    <span id="profile-toast-msg">Profile updated successfully!</span>
+  </div>
+
+</body>
+</html>

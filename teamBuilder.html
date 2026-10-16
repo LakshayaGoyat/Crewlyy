@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Crewlyy - Team Builder Studio">
   <title>CREWLYY - Team Builder (Desktop)</title>
+  <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/teamBuilder.css">
+  <script src="js/navbar.js" defer></script>
   <script src="js/teamBuilder.js" defer></script>
 </head>
 <body>
@@ -15,7 +17,7 @@
        ======================================================================== -->
   <header class="tb-navbar">
     <div class="tb-nav-left">
-      <a href="index.html" class="tb-brand" aria-label="Crewlyy Home">
+      <a href="homepage.html" class="tb-brand" aria-label="Crewlyy Home">
         <div class="tb-brand-logo">
           <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
         </div>
@@ -24,11 +26,11 @@
 
       <nav aria-label="Main Navigation">
         <ul class="tb-nav-links">
-          <li class="tb-nav-item"><a href="#discover">Discover</a></li>
-          <li class="tb-nav-item"><a href="#how-it-works">How it Works</a></li>
-          <li class="tb-nav-item"><a href="#features">Features</a></li>
-          <li class="tb-nav-item active-box"><a href="#explore-teams">Explore Teams</a></li>
-          <li class="tb-nav-item"><a href="#hackathons">Hackathons</a></li>
+          <li class="tb-nav-item"><a href="homepage.html">Discover</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">How it Works</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">Features</a></li>
+          <li class="tb-nav-item active-box"><a href="squad-matrix.html">Explore Teams</a></li>
+          <!-- <li class="tb-nav-item"><a href="squad-matrix.html#hackathons">Hackathons</a></li> -->
           <li class="tb-nav-item"><a href="#my-requests">My Requests</a></li>
         </ul>
       </nav>
@@ -55,13 +57,12 @@
       </button>
 
       <!-- Create Team Button -->
-      <button class="tb-btn-create-team" id="create-team-btn" type="button">
-        <span>Create</span>
-        <span>Team</span>
-      </button>
+      <!-- <button class="tb-btn-create-team" id="create-team-btn" type="button" onclick="window.location.href='teamBuilder.html'">
+        Create Team
+      </button> -->
 
       <!-- User Profile -->
-      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan">
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan" onclick="window.location.href='profile.html'">
         <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
         <div class="tb-user-meta">
           <span class="tb-user-name">Alex Morgan</span>
