@@ -49,5 +49,8 @@ loginForm.addEventListener('submit', (event) => {
     loginForm.reportValidity();
     return;
   }
-  showMessage('Access request accepted. Workspace handoff is ready.');
+  showMessage('Access request accepted. Redirecting to Squad Matrix...');
+  setTimeout(() => {
+    window.location.href = 'squad-matrix.html';
+  }, 600);
 });
