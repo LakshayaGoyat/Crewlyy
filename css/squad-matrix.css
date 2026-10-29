@@ -562,6 +562,31 @@ input, select {
   stroke-width: 2;
 }
 
+.btn-import-teams {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #94a3b8;
+  background: rgba(14, 22, 48, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-import-teams:hover {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(20, 32, 70, 0.8);
+}
+
+.btn-import-teams svg {
+  stroke: var(--text-cyan);
+}
+
 /* ==========================================================================
    ROLE FILTER BAR
    ========================================================================== */

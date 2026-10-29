@@ -729,11 +729,142 @@
         showToast("You have 1 pending squad review from EcoTrack.");
       });
     }
+
+    // Sync / Load teams.json from file upload
+    const btnImportTeams = document.getElementById("btn-import-teams");
+    const importTeamsInput = document.getElementById("import-teams-input");
+    if (btnImportTeams && importTeamsInput) {
+      btnImportTeams.addEventListener("click", () => {
+        importTeamsInput.click();
+      });
+
+      importTeamsInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            const teams = Array.isArray(parsed) ? parsed : (parsed.teams || []);
+            if (teams.length > 0) {
+              try {
+                localStorage.setItem('crewlyy_teams', JSON.stringify(teams, null, 2));
+              } catch (err) {}
+              mergeSquads(teams);
+              showToast(`Synced ${teams.length} ${teams.length === 1 ? 'squad' : 'squads'} from ${file.name}!`);
+            } else {
+              showToast("No valid squad records found in the selected file.");
+            }
+          } catch (err) {
+            showToast("Failed to parse JSON file: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+        importTeamsInput.value = "";
+      });
+    }
+  }
+
+  // Normalize team data from teams.json / Team Builder into a Squad Matrix card object
+  function normalizeTeamToSquad(t) {
+    if (!t) return null;
+    const name = t.name || (t.team && t.team.name) || 'Untitled Squad';
+    const id = t.id || t.teamId || ('squad_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '_'));
+    const desc = t.description || (t.team && t.team.description) || t.elevatorPitch || (t.team && t.team.elevatorPitch) || 'New hackathon squad forming.';
+    const dates = t.dates || (t.team && t.team.dates) || '';
+    const hackathon = t.hackathon || (dates ? `Hackathon (${dates})` : 'GreenTech Hack 2026');
+    const skills = Array.isArray(t.skillsRequired) ? t.skillsRequired : (t.team && Array.isArray(t.team.skillsRequired) ? t.team.skillsRequired : (t.stack || ['React', 'TypeScript']));
+    const spots = typeof t.spots === 'number' ? t.spots : ((t.roster && t.roster.vacantSlots) || (t.team && t.team.roster && t.team.roster.vacantSlots) || 3);
+    const spotClass = spots === 1 ? 'spots-red' : (spots === 2 ? 'spots-indigo' : 'spots-blue');
+    const spotLabel = `${spots} ${spots === 1 ? 'SPOT' : 'SPOTS'} LEFT`;
+
+    // Derive roles from skills
+    let roles = t.roles;
+    if (!roles || !Array.isArray(roles) || roles.length === 0) {
+      roles = [];
+      const joined = skills.join(' ').toLowerCase();
+      if (joined.includes('react') || joined.includes('front') || joined.includes('vue') || joined.includes('ui') || joined.includes('html') || joined.includes('css')) roles.push('Frontend');
+      if (joined.includes('node') || joined.includes('back') || joined.includes('python') || joined.includes('fastapi') || joined.includes('api') || joined.includes('sql')) roles.push('Backend');
+      if (joined.includes('design') || joined.includes('figma') || joined.includes('ux')) roles.push('UI/UX Design');
+      if (joined.includes('ai') || joined.includes('ml') || joined.includes('llm') || joined.includes('gpt') || joined.includes('vision')) roles.push('AI / LLM Ops');
+      if (joined.includes('web3') || joined.includes('solidity') || joined.includes('crypto') || joined.includes('smart') || joined.includes('contract')) roles.push('Web3 / Smart Contracts');
+      if (joined.includes('product') || joined.includes('pitch') || joined.includes('mgmt') || joined.includes('deck')) roles.push('Product');
+      if (roles.length === 0) roles.push('Frontend', 'Product');
+    }
+
+    return {
+      id: id,
+      name: name,
+      hackathon: hackathon,
+      spots: spots,
+      spotLabel: spotLabel,
+      spotClass: spotClass,
+      description: desc,
+      metricKicker: t.metricKicker || "SQUAD EQUILIBRIUM",
+      metricValue: t.metricValue || (t.roster && t.roster.equilibrium) || "48%",
+      metricUnit: t.metricUnit || "Matrix",
+      metricType: "pill",
+      metricPill: t.recruitmentOpen !== false ? "Recruiting" : "Private",
+      metricIcon: "gauge",
+      crewCount: t.crewCount || "+2",
+      stack: skills,
+      highlightStack: t.highlightStack || skills[0] || "React",
+      roles: Array.from(new Set(roles)),
+      experience: t.experience || "intermediate",
+      created: t.created || (t.confirmedAt ? new Date(t.confirmedAt).getTime() : Date.now()),
+      pitch: t.elevatorPitch || (t.team && t.team.elevatorPitch) || desc,
+      roster: t.roster || (t.team && t.team.roster) || null
+    };
+  }
+
+  // Merge squad list into SQUADS array
+  function mergeSquads(teamList) {
+    if (!Array.isArray(teamList)) return;
+    teamList.forEach((team) => {
+      const squadObj = normalizeTeamToSquad(team);
+      if (!squadObj) return;
+      const existingIdx = SQUADS.findIndex(
+        (s) => s.id === squadObj.id || s.name.toLowerCase() === squadObj.name.toLowerCase()
+      );
+      if (existingIdx >= 0) {
+        SQUADS[existingIdx] = squadObj;
+      } else {
+        SQUADS.unshift(squadObj);
+      }
+    });
+    renderSquads();
+  }
+
+  // Load custom teams from localStorage and teams.json
+  function loadStoredSquads() {
+    // 1. Instantly merge from localStorage so client navigation is immediate
+    try {
+      const stored = localStorage.getItem('crewlyy_teams');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const storedTeams = Array.isArray(parsed) ? parsed : (parsed.teams || []);
+        mergeSquads(storedTeams);
+      }
+    } catch (e) {
+      console.warn("Could not read crewlyy_teams from localStorage:", e);
+    }
+
+    // 2. Fetch teams.json file to keep sync with disk/server
+    fetch('teams.json')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          const fileTeams = Array.isArray(data) ? data : (data.teams || []);
+          mergeSquads(fileTeams);
+        }
+      })
+      .catch(() => {});
   }
 
   // Initialize
   document.addEventListener("DOMContentLoaded", () => {
     initDomElements();
+    loadStoredSquads();
     renderRolePills();
     renderSquads();
     attachEventListeners();

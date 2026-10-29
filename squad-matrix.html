@@ -128,15 +128,26 @@
             My Requests <span class="dot-cyan"></span>
           </a>
         </div>
-        <button type="button" class="btn-build-crew" data-action="create-team">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="8.5" cy="7" r="4"></circle>
-            <line x1="20" y1="8" x2="20" y2="14"></line>
-            <line x1="23" y1="11" x2="17" y2="11"></line>
-          </svg>
-          Build Your Own Crew
-        </button>
+        <div class="hero-actions-group" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <input type="file" id="import-teams-input" accept=".json,application/json" style="display: none;" />
+          <button type="button" class="btn-import-teams" id="btn-import-teams" title="Sync or load a downloaded teams.json file">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Sync / Load JSON
+          </button>
+          <button type="button" class="btn-build-crew" data-action="create-team">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            Build Your Own Crew
+          </button>
+        </div>
       </div>
     </section>
 

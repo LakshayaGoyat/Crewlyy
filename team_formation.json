@@ -1,0 +1,71 @@
+[
+  {
+    "id": "squad_pixel_pioneers",
+    "name": "Pixel Pioneers",
+    "elevatorPitch": "An AI-powered accessibility copilot for live events",
+    "description": "We're making real-time captions, audio cues, and venue guidance work together in one simple mobile experience. Our goal is an inclusive event companion we can demo by Sunday.",
+    "location": "Bengaluru, India",
+    "dates": "24 Oct · 9:00 AM",
+    "skillsRequired": [
+      "React",
+      "UI/UX Design",
+      "AI / ML",
+      "Pitching",
+      "Web Audio API"
+    ],
+    "recruitmentOpen": true,
+    "roster": {
+      "totalCapacity": 5,
+      "lockedSlots": 2,
+      "vacantSlots": 3,
+      "equilibrium": "48% Matrix",
+      "members": [
+        {
+          "name": "Alex Morgan",
+          "role": "Captain · Systems Lead",
+          "status": "Verified",
+          "avatar": "images/alex_roster.png"
+        },
+        {
+          "name": "Jordan Chen",
+          "role": "Core · AI / ML",
+          "status": "Confirmed",
+          "avatar": "images/jordan_roster.png"
+        }
+      ],
+      "vacantRoles": [
+        "Frontend Architect",
+        "UI / UX Designer",
+        "Pitch & Demo Specialist"
+      ]
+    },
+    "status": "CONFIRMED",
+    "confirmedAt": "2026-10-30T00:50:00.000Z",
+    "timestampFormatted": "30/10/2026, 12:50:00 AM",
+    "hackathon": "Bengaluru Hackathon 2026",
+    "spots": 3,
+    "spotLabel": "3 SPOTS LEFT",
+    "spotClass": "spots-blue",
+    "metricKicker": "EQUILIBRIUM",
+    "metricValue": "48%",
+    "metricUnit": "Matrix",
+    "metricType": "pill",
+    "metricPill": "Recruiting",
+    "crewCount": "+2",
+    "stack": [
+      "React",
+      "UI/UX Design",
+      "AI / ML",
+      "Pitching",
+      "Web Audio API"
+    ],
+    "highlightStack": "AI / ML",
+    "roles": [
+      "Frontend",
+      "UI/UX Design",
+      "AI / LLM Ops"
+    ],
+    "experience": "intermediate",
+    "created": 1
+  }
+]
