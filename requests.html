@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/navbar.css">
+  <title>CREWLYY - My Requests</title>
+  <style>
+    :root {
+      --bg-dark: #070919;
+      --bg-card: #0f132e;
+      --bg-input: #171c42;
+      --primary-accent: #00aaff;
+      --primary-accent-hover: #0088cc;
+      --blue-accent: #202754;
+      --text-main: #ffffff;
+      --text-muted: #8d95c4;
+      --border-color: #202754;
+      --tag-bg: #1c2352;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Navigation Header */
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 2rem; background-color: rgba(7, 9, 25, 0.95);
+      border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000;
+    }
+    .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 0.6rem; }
+    .logo-img { height: 32px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.82rem; color: var(--text-muted); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    /* Buttons & Badges */
+    .btn-primary { background-color: var(--primary-accent); color: #000; font-weight: 700; padding: 0.75rem 1.6rem; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+    .btn-primary:hover { background-color: var(--primary-accent-hover); }
+    .btn-secondary { background-color: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+    .btn-secondary:hover { background-color: var(--border-color); }
+    
+    .btn-danger { background-color: rgba(255, 77, 77, 0.15); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+    .btn-danger:hover { background-color: #ff4d4d; color: #fff; }
+
+    .user-profile-badge { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-card); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.8rem; }
+    .avatar-img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+
+    /* Layout Containers */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; width: 100%; }
+    .dashboard-layout { display: grid; grid-template-columns: 260px 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+
+    /* Filters Box */
+    .filter-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; font-size: 0.85rem; height: fit-content; }
+    .filter-group { margin-bottom: 1.5rem; }
+    .filter-group h4 { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .filter-option { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: var(--text-muted); cursor: pointer; }
+
+    /* Card & Tags */
+    .requests-list { display: flex; flex-direction: column; gap: 1rem; }
+    .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; position: relative; }
+    .form-control { width: 100%; padding: 0.75rem; background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 0.9rem; }
+
+    .tag-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+    .tag { background-color: var(--tag-bg); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; }
+    .tag.accent { background: rgba(255, 138, 0, 0.15); color: var(--primary-accent); border: 1px solid var(--primary-accent); }
+
+    /* Status Pill Badges */
+    .status-badge { font-size: 0.68rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-pending { background: rgba(255, 170, 0, 0.15); color: #ffaa00; border: 1px solid #ffaa00; }
+    .status-accepted { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid #00e676; }
+    .status-rejected { background: rgba(255, 23, 68, 0.15); color: #ff1744; border: 1px solid #ff1744; }
+
+    /* Footer */
+    footer { margin-top: auto; background-color: #040510; border-top: 1px solid var(--border-color); padding: 3rem 4rem 1.5rem; font-size: 0.8rem; color: var(--text-muted); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .footer-col h4 { color: #fff; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.5rem; }
+    .footer-bottom { display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 1.5rem; }
+
+    @media (max-width: 900px) {
+      .dashboard-layout, .footer-grid { grid-template-columns: 1fr; }
+      .header { padding: 1rem; flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+ <header class="tb-navbar">
+    <div class="tb-nav-left">
+      <a href="homepage.html" class="tb-brand" aria-label="Crewlyy Home">
+        <div class="tb-brand-logo">
+          <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
+        </div>
+        <span class="tb-brand-name">CREWLYY</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="tb-nav-links">
+          <li class="tb-nav-item"><a href="homepage.html">Discover</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">How it Works</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">Features</a></li>
+          <li class="tb-nav-item active-box"><a href="squad-matrix.html">Explore Teams</a></li>
+          <!-- <li class="tb-nav-item"><a href="squad-matrix.html#hackathons">Hackathons</a></li> -->
+          <li class="tb-nav-item"><a href="requests.html">My Requests</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="tb-nav-right">
+      <!-- Search Input -->
+      <div class="tb-search-box" role="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="tb-search-input" id="global-search" placeholder="Search teams, projects..." aria-label="Search teams, projects">
+        <kbd class="tb-kbd">⌘ K</kbd>
+      </div>
+
+      <!-- Notifications -->
+      <button class="tb-notification-btn" id="notif-btn" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="tb-notif-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- Create Team Button -->
+      <!-- <button class="tb-btn-create-team" id="create-team-btn" type="button" onclick="window.location.href='teamBuilder.html'">
+        Create Team
+      </button> -->
+
+      <!-- User Profile -->
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan" onclick="window.location.href='profile.html'">
+        <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
+        <div class="tb-user-meta">
+          <span class="tb-user-name">Alex Morgan</span>
+          <span class="tb-user-role">Lead Architect</span>
+        </div>
+        <span class="tb-user-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Page Hero Banner -->
+    <section style="background: radial-gradient(circle at top, #182052 0%, var(--bg-card) 100%); border: 1px solid var(--border-color); padding: 2rem; border-radius: 12px; text-align: center;">
+      <span style="font-size:0.7rem; color:var(--primary-accent); letter-spacing:1px; background:rgba(255,138,0,0.1); padding:4px 10px; border-radius:20px;">SQUAD APPLICATION DISPATCH</span>
+      <h1 style="margin: 0.8rem 0; font-size: 2rem;">My Joining Requests</h1>
+      <p style="color:var(--text-muted); max-width:580px; margin: 0 auto; font-size:0.88rem;">Track your submitted requests to join external squads, communicate with team captains, and manage active invitations.</p>
+    </section>
+
+    <div class="dashboard-layout">
+      <!-- Sidebar Filters -->
+      <aside class="filter-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <strong style="font-size:1rem;">⚡ Filter Requests</strong>
+          <a href="requests.html" style="font-size:0.75rem; color:var(--text-muted);">Reset All</a>
+        </div>
+
+        <div class="filter-group">
+          <h4>APPLICATION STATUS</h4>
+          <label class="filter-option"><input type="checkbox" checked> Pending Review <span style="font-size:0.65rem; background:rgba(255,170,0,0.2); color:#ffaa00; padding:1px 5px; border-radius:3px; margin-left:auto;">2</span></label>
+          <label class="filter-option"><input type="checkbox" checked> Accepted <span style="font-size:0.65rem; background:rgba(0,230,118,0.2); color:#00e676; padding:1px 5px; border-radius:3px; margin-left:auto;">1</span></label>
+          <label class="filter-option"><input type="checkbox"> Rejected / Declined <span style="font-size:0.65rem; background:rgba(255,23,68,0.2); color:#ff1744; padding:1px 5px; border-radius:3px; margin-left:auto;">1</span></label>
+        </div>
+
+        <div class="filter-group">
+          <h4>TARGET ROLE</h4>
+          <label class="filter-option"><input type="checkbox" checked> Frontend Architect</label>
+          <label class="filter-option"><input type="checkbox" checked> Smart Contract Dev</label>
+          <label class="filter-option"><input type="checkbox"> AI / ML Specialist</label>
+        </div>
+      </aside>
+
+      <!-- Main Request Feed -->
+      <section>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3>Sent Requests <span style="font-size:0.8rem; background:var(--tag-bg); padding:2px 8px; border-radius:12px; color:var(--primary-accent);">4 TOTAL SUBMISSIONS</span></h3>
+          <span style="font-size:0.8rem; color:var(--text-muted);">Sort by: Most Recent</span>
+        </div>
+
+        <div class="requests-list">
+          <!-- Request Item 1: Pending -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div>
+                <h3 style="font-size:1.1rem;">EcoTrack</h3>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">GreenTech Hack 2026 • Captain: <strong style="color:#fff;">Sarah Connor</strong></div>
+              </div>
+              <span class="status-badge status-pending">● Pending Review</span>
+            </div>
+            
+            <p style="margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted);">
+              <strong style="color:#fff;">Applied Role:</strong> Frontend Architect<br>
+              <span style="display:block; margin-top:4px; font-style:italic;">"Hey Sarah! I have 4+ years in React & Web3 integrations. I can set up your real-time telemetry dashboard in under 6 hours."</span>
+            </p>
+
+            <div class="tag-container">
+              <span class="tag accent">React</span>
+              <span class="tag accent">TypeScript</span>
+              <span class="tag">Submitted 2 hours ago</span>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; border-top:1px solid var(--border-color); padding-top:1rem;">
+              <span style="font-size:0.75rem; color:var(--text-muted);">Awaiting captain response...</span>
+              <button class="btn-danger" onclick="alert('Request withdrawn successfully.')">Withdraw Request</button>
+            </div>
+          </div>
+
+          <!-- Request Item 2: Accepted -->
+          <div class="card" style="border-color: rgba(0,230,118,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div>
+                <h3 style="font-size:1.1rem;">ScribeDoc</h3>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">HealthHacks 2026 • Captain: <strong style="color:#fff;">Dr. Marcus Vance</strong></div>
+              </div>
+              <span class="status-badge status-accepted">✓ Request Accepted</span>
+            </div>
+            
+            <p style="margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted);">
+              <strong style="color:#fff;">Applied Role:</strong> Full Stack Lead<br>
+              <span style="display:block; margin-top:4px; font-style:italic;">"Your squad looks solid. Happy to handle the FastAPI vector pipeline and audio transcription UI."</span>
+            </p>
+
+            <div class="tag-container">
+              <span class="tag accent">FastAPI</span>
+              <span class="tag accent">Python</span>
+              <span class="tag">Accepted Yesterday</span>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; border-top:1px solid var(--border-color); padding-top:1rem;">
+              <span style="font-size:0.75rem; color:#00e676;">🎉 You've been added to the squad roster!</span>
+              <a href="builder.html" class="btn-primary" style="font-size:0.75rem; padding:0.5rem 1rem;">Enter Squad War Room &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Request Item 3: Pending -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div>
+                <h3 style="font-size:1.1rem;">ByteCraft</h3>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Figma DevFest 2026 • Captain: <strong style="color:#fff;">Elena Rostova</strong></div>
+              </div>
+              <span class="status-badge status-pending">● Pending Review</span>
+            </div>
+            
+            <p style="margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted);">
+              <strong style="color:#fff;">Applied Role:</strong> UI Engineer<br>
+              <span style="display:block; margin-top:4px; font-style:italic;">"Experienced in WebAssembly and canvas DOM binding. Excited to collaborate."</span>
+            </p>
+
+            <div class="tag-container">
+              <span class="tag accent">Wasm</span>
+              <span class="tag">Submitted 3 days ago</span>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; border-top:1px solid var(--border-color); padding-top:1rem;">
+              <span style="font-size:0.75rem; color:var(--text-muted);">Awaiting captain response...</span>
+              <button class="btn-danger" onclick="alert('Request withdrawn successfully.')">Withdraw Request</button>
+            </div>
+          </div>
+
+          <!-- Request Item 4: Rejected -->
+          <div class="card" style="opacity:0.7;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div>
+                <h3 style="font-size:1.1rem;">Quasar Game Studio</h3>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Web3 Play Arena • Captain: <strong style="color:#fff;">Kenji Sato</strong></div>
+              </div>
+              <span class="status-badge status-rejected">✕ Position Filled</span>
+            </div>
+
+            <p style="margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted);">
+              <strong style="color:#fff;">Applied Role:</strong> Rust Systems Developer<br>
+              <span style="display:block; margin-top:4px; font-style:italic;">"Squad position filled by existing contributor. Best of luck!"</span>
+            </p>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:1.2rem; border-top:1px solid var(--border-color); padding-top:1rem;">
+              <button class="btn-secondary" style="font-size:0.75rem;" onclick="this.closest('.card').remove()">Dismiss</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom:1rem;">
+          <img src="https://raw.githubusercontent.com/LakshayaGoyat/My-Website/96bede6ef9c893cb49f377a97ad0f51a86cdd0f8/Robot.png" alt="CREWLYY Logo" class="logo-img">
+          CREWLYY
+        </div>
+        <p>High-performance squad curation and elite hackathon matchmaking.</p>
+      </div>
+      <div class="footer-col">
+        <h4>PLATFORM</h4>
+        <ul>
+          <li><a href="discover.html">Discover Squads</a></li>
+          <li><a href="requests.html">My Requests</a></li>
+          <li><a href="builder.html">Team Rosters</a></li>
+          <li><a href="coming-soon.html">Hackathon Arena</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>RESOURCES</h4>
+        <ul>
+          <li><a href="coming-soon.html">Builder Playbooks</a></li>
+          <li><a href="coming-soon.html">Hackathon Toolkits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>LEGAL & TRUST</h4>
+        <ul>
+          <li><a href="coming-soon.html">Security Verifications</a></li>
+          <li><a href="coming-soon.html">Terms of Association</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 CREWLYY Architectural Systems Inc. All rights reserved.</div>
+      <div>NODE SYNCED v2.4.0-PROD</div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CREWLYY — Global Hacker Synthesis Engine | Explore Teams</title>
+  
+  <!-- Fonts matching Figma Design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/squad-matrix.css" />
+
+  <!-- Client Script -->
+  <script src="js/navbar.js" defer></script>
+  <script src="js/squad-matrix.js" defer></script>
+</head>
+<body>
+
+  <!-- Top Global Navigation Bar -->
+  <header class="tb-navbar">
+    <div class="tb-nav-left">
+      <a href="homepage.html" class="tb-brand" aria-label="Crewlyy Home">
+        <div class="tb-brand-logo">
+          <img src="images/robot_logo.png" alt="Crewlyy Mascot" width="22" height="22">
+        </div>
+        <span class="tb-brand-name">CREWLYY</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="tb-nav-links">
+          <li class="tb-nav-item"><a href="homepage.html">Discover</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">How it Works</a></li>
+          <li class="tb-nav-item"><a href="homepage.html#features">Features</a></li>
+          <li class="tb-nav-item active-box"><a href="squad-matrix.html">Explore Teams</a></li>
+          <!-- <li class="tb-nav-item"><a href="squad-matrix.html#hackathons">Hackathons</a></li> -->
+          <li class="tb-nav-item"><a href="requests.html">My Requests</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="tb-nav-right">
+      <!-- Search Input -->
+      <div class="tb-search-box" role="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="tb-search-input" id="global-search" placeholder="Search teams, projects..." aria-label="Search teams, projects">
+        <kbd class="tb-kbd">⌘ K</kbd>
+      </div>
+
+      <!-- Notifications -->
+      <button class="tb-notification-btn" id="notif-btn" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="tb-notif-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- Create Team Button -->
+      <button class="tb-btn-create-team" id="create-team-btn" type="button" onclick="window.location.href='teamBuilder.html'">
+        Create Team
+      </button>
+
+      <!-- User Profile -->
+      <div class="tb-user-profile" id="user-profile-menu" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile: Alex Morgan" onclick="window.location.href='profile.html'">
+        <img src="images/robot_logo.png" alt="Alex Morgan avatar" class="tb-user-avatar">
+        <div class="tb-user-meta">
+          <span class="tb-user-name">Alex Morgan</span>
+          <span class="tb-user-role">Lead Architect</span>
+        </div>
+        <span class="tb-user-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section" id="top">
+      <!-- Pill Badge -->
+      <div class="hero-pill-badge">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>GLOBAL HACKER SYNTHESIS ENGINE</span>
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="hero-title">
+        Assemble your dream crew, <em>tackle massive challenges</em>
+      </h1>
+
+      <!-- Description -->
+      <p class="hero-description">
+        Explore existing team drafts with verified hacker profiles, select your needed skills, and merge forces instantly into high-output squads.
+      </p>
+
+      <!-- Search Input Bar -->
+      <form class="hero-search-wrapper" id="hero-search-form" role="search">
+        <div class="hero-search-bar">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+          </svg>
+          <input
+            type="search"
+            id="hero-search-input"
+            placeholder="Search projects, hackathons, or technologies (e.g., Rust, Wasm, EcoTrack)..."
+            autocomplete="off"
+          />
+          <button type="submit" class="btn-find-teams">
+            Find Teams →
+          </button>
+        </div>
+      </form>
+
+      <!-- Hero Sub Navigation Tabs & Build Action -->
+      <div class="hero-sub-row">
+        <div class="hero-quick-tabs">
+          <a href="#explore-teams" class="hero-tab-pill is-active">Explore Teams</a>
+          <a href="#hackathons" class="hero-tab-pill">
+            Hackathons <span class="tag-soon">SOON</span>
+          </a>
+          <a href="#my-requests" class="hero-tab-pill">
+            My Requests <span class="dot-cyan"></span>
+          </a>
+        </div>
+        <button type="button" class="btn-build-crew" data-action="create-team">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          Build Your Own Crew
+        </button>
+      </div>
+    </section>
+
+    <!-- Browse Squads by Needed Roles Bar -->
+    <section class="roles-section" id="explore-teams" aria-labelledby="roles-heading">
+      <div class="roles-header">
+        <h2 class="roles-header-title" id="roles-heading">Browse Squads by Needed Roles</h2>
+        <a href="#all-roles" class="roles-header-link">View all 18 categories →</a>
+      </div>
+      <div class="roles-scroll-container" id="roles-container">
+        <!-- Rendered dynamically & hydrated via JS -->
+      </div>
+    </section>
+
+    <!-- Marketplace Main Area: Filters Sidebar + Matching Squads Grid -->
+    <section class="marketplace-container" id="matching-squads-section" aria-labelledby="matching-squads-heading">
+      
+      <!-- Filters Sidebar -->
+      <aside class="filters-sidebar" id="filters-sidebar" aria-label="Squad Filters">
+        <div class="filters-header">
+          <div class="filters-title">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6"></line>
+              <line x1="8" y1="12" x2="20" y2="12"></line>
+              <line x1="12" y1="18" x2="20" y2="18"></line>
+              <circle cx="6" cy="12" r="2"></circle>
+              <circle cx="10" cy="18" r="2"></circle>
+            </svg>
+            <span>Filters</span>
+          </div>
+          <button type="button" class="btn-reset-filters" id="reset-filters-btn">Reset All</button>
+        </div>
+
+        <!-- Filter 1: Spots Available -->
+        <div class="filter-group">
+          <div class="filter-group-title">Spots Available</div>
+          <div class="filter-options-list">
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="spots" value="1" />
+                <span class="custom-checkbox"></span>
+                <span>1 Spot Left</span>
+              </span>
+              <span class="filter-tag tag-urgent">Urgent</span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="spots" value="2" />
+                <span class="custom-checkbox"></span>
+                <span>2 Spots Left</span>
+              </span>
+              <span class="filter-tag tag-active">Active</span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="spots" value="3+" />
+                <span class="custom-checkbox"></span>
+                <span>3+ Spots Left</span>
+              </span>
+              <span class="filter-tag tag-forming">Forming</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter 2: Featured Hackathons -->
+        <div class="filter-group">
+          <div class="filter-group-title">Featured Hackathons</div>
+          <div class="filter-options-list">
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="hackathon" value="ETHGlobal 2026" />
+                <span class="custom-checkbox"></span>
+                <span>EthGlobal 2026</span>
+              </span>
+              <span class="filter-count">12</span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="hackathon" value="HealthHacks 2026" />
+                <span class="custom-checkbox"></span>
+                <span>HealthHacks 2026</span>
+              </span>
+              <span class="filter-count">9</span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="hackathon" value="GreenTech Hack" />
+                <span class="custom-checkbox"></span>
+                <span>GreenTech Hack</span>
+              </span>
+              <span class="filter-count">5</span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="checkbox" name="hackathon" value="SaaS DevSprint" />
+                <span class="custom-checkbox"></span>
+                <span>SaaS DevSprint</span>
+              </span>
+              <span class="filter-count">11</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter 3: Hacker Experience -->
+        <div class="filter-group">
+          <div class="filter-group-title">Hacker Experience</div>
+          <div class="filter-options-list">
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="radio" name="experience" value="all" checked />
+                <span class="custom-radio"></span>
+                <span>All Levels</span>
+              </span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="radio" name="experience" value="beginner" />
+                <span class="custom-radio"></span>
+                <span>Beginner Friendly</span>
+              </span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="radio" name="experience" value="intermediate" />
+                <span class="custom-radio"></span>
+                <span>Intermediate</span>
+              </span>
+            </label>
+            <label class="filter-item">
+              <span class="filter-item-left">
+                <input type="radio" name="experience" value="advanced" />
+                <span class="custom-radio"></span>
+                <span>Advanced Architecture</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Builder Insight Callout Box -->
+        <div class="builder-insight-card">
+          <div class="insight-header">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+            <span>Builder Insight</span>
+          </div>
+          <p class="insight-body">
+            Squads with a dedicated UI designer &amp; systems engineer submit to judges <strong>3.8x faster</strong> during sprint lockouts.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Matching Squads Results Column -->
+      <div class="squads-results-container">
+        <!-- Results Top Bar -->
+        <div class="results-top-bar">
+          <div class="results-title-group">
+            <h2 class="results-heading" id="matching-squads-heading">Matching Squads</h2>
+            <span class="squads-count-badge" id="ready-count-badge">4 SQUADS READY TO DEPLOY</span>
+          </div>
+
+          <div class="sort-wrapper">
+            <span>Sort by:</span>
+            <select class="sort-select-dropdown" id="sort-select" aria-label="Sort Squads">
+              <option value="recent">Most Recent</option>
+              <option value="spots">Spots Remaining</option>
+              <option value="name">Name A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Squads 2x2 Grid -->
+        <div class="squads-grid" id="squads-grid">
+          <!-- Rendered dynamically by js/script.js -->
+        </div>
+
+        <!-- Pagination Bar -->
+        <nav class="pagination-row" aria-label="Squads Pagination">
+          <span class="pagination-status-text" id="pagination-status">Showing 4 of 38 active squads</span>
+          <div class="pagination-controls" id="pagination-controls">
+            <!-- Controls rendered by js/script.js -->
+          </div>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer matching Figma -->
+  <footer class="site-footer">
+    <div class="footer-content-grid">
+      <!-- Col 1: About & Status -->
+      <div class="footer-col-about">
+        <a href="homepage.html" class="brand-logo">CREWLYY</a>
+        <p class="footer-about-copy">
+          High-performance squad curation and elite hackathon matchmaking. Designed for technical founders, systems architects, and ambitious builders.
+        </p>
+        <div class="node-synced-pill">
+          <span class="sync-dot" aria-hidden="true"></span>
+          <strong>• NODE SYNCED</strong>
+          <span>v2.4.0-PROD</span>
+        </div>
+      </div>
+
+      <!-- Col 2: Platform -->
+      <nav class="footer-nav-col" aria-label="Platform Links">
+        <span class="footer-nav-heading">Platform</span>
+        <a href="#explore-teams" class="footer-nav-link">Discover Squads</a>
+        <a href="#rosters" class="footer-nav-link">Team Rosters</a>
+        <a href="#hackathons" class="footer-nav-link">Hackathon Arena</a>
+        <a href="#skills" class="footer-nav-link">Skill Matching Engine</a>
+        <a href="#protocol" class="footer-nav-link">Protocol Mechanics</a>
+      </nav>
+
+      <!-- Col 3: Resources -->
+      <nav class="footer-nav-col" aria-label="Resources Links">
+        <span class="footer-nav-heading">Resources</span>
+        <a href="#playbooks" class="footer-nav-link">Builder Playbooks</a>
+        <a href="#toolkits" class="footer-nav-link">Hackathon Toolkits</a>
+        <a href="#vitrine" class="footer-nav-link">Architecture Vitrine</a>
+        <a href="#api" class="footer-nav-link">API Integration</a>
+        <a href="#telemetry" class="footer-nav-link">Telemetry &amp; Stats</a>
+      </nav>
+
+      <!-- Col 4: Legal & Trust -->
+      <nav class="footer-nav-col" aria-label="Legal Links">
+        <span class="footer-nav-heading">Legal &amp; Trust</span>
+        <a href="#security" class="footer-nav-link">Security Verifications</a>
+        <a href="#terms" class="footer-nav-link">Terms of Association</a>
+        <a href="#privacy" class="footer-nav-link">Privacy Framework</a>
+        <a href="#escrow" class="footer-nav-link">Escrow Protocol</a>
+        <a href="#conduct" class="footer-nav-link">Code of Conduct</a>
+      </nav>
+    </div>
+
+    <!-- Bottom Copyright & Color Labels -->
+    <div class="footer-bottom-bar">
+      <span>© 2025 CREWLYY Architectural Systems Inc. All rights reserved.</span>
+      <span class="footer-color-tags">Depths Navy • Aster Flower • Habañero Core</span>
+    </div>
+  </footer>
+
+  <!-- Modal Dialog Container -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">×</button>
+      <div class="modal-kicker" id="modal-kicker">SQUAD SYNTHESIS</div>
+      <h3 class="modal-title" id="modal-title">Request to Join</h3>
+      <form id="modal-form">
+        <div class="modal-body" id="modal-body"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" class="btn-view-idea" onclick="document.getElementById('modal-close-btn').click()">Cancel</button>
+          <button type="submit" class="btn-create-team">Confirm Action</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Feedback -->
+  <div class="toast-notification" id="toast-notification" role="status" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="9 12 11 14 15 10"></polyline>
+    </svg>
+    <span id="toast-text">Action completed successfully</span>
+  </div>
+
+</body>
+</html>

@@ -38,7 +38,10 @@ document.addEventListener('click', (event) => {
   if (action === 'load-demo') {
     document.querySelector('#email').value = 'alex.morgan@collective.net';
     passwordInput.value = 'sandbox-demo';
-    showMessage('Sandbox Demo Mode loaded.');
+    showMessage('Sandbox Demo Mode loaded. Launching Team Builder...');
+    setTimeout(() => {
+      window.location.href = 'teamBuilder.html';
+    }, 600);
   }
 });
 
@@ -49,5 +52,8 @@ loginForm.addEventListener('submit', (event) => {
     loginForm.reportValidity();
     return;
   }
-  showMessage('Access request accepted. Workspace handoff is ready.');
+  showMessage('Access request accepted. Redirecting to Squad Matrix...');
+  setTimeout(() => {
+    window.location.href = 'squad-matrix.html';
+  }, 600);
 });
