@@ -149,29 +149,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (btnSaveDraft) {
-    btnSaveDraft.addEventListener('click', () => {
+    btnSaveDraft.addEventListener('click', async () => {
       if (autosaveDot) autosaveDot.style.background = 'var(--cyan-primary)';
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       autosaveText.textContent = `Draft saved to Matrix · ${timeStr}`;
-      try {
-        const draftData = collectFormData();
-        localStorage.setItem('crewlyy_team_draft', JSON.stringify(draftData, null, 2));
-      } catch (err) {
-        console.warn('Failed to save draft to localStorage:', err);
+      const draftData = collectFormData();
+      draftData.status = 'DRAFT';
+      if (window.CrewlyyDB && typeof window.CrewlyyDB.saveTeam === 'function') {
+        await window.CrewlyyDB.saveTeam(draftData);
       }
-      showToast('Draft successfully saved to local matrix.');
+      showToast('Draft successfully saved to cloud database.');
     });
   }
 
   if (btnDiscard) {
     btnDiscard.addEventListener('click', () => {
-      if (confirm('Discard changes and restore last synced state?')) {
-        try {
-          localStorage.removeItem('crewlyy_team_draft');
-          localStorage.removeItem('crewlyy_team_formation');
-        } catch (e) {}
-
+      if (confirm('Discard changes and restore default state?')) {
         teamNameInput.value = 'Pixel Pioneers';
         elevatorPitchInput.value = 'An AI-powered accessibility copilot for live events';
         projectDescInput.value = "We're making real-time captions, audio cues, and venue guidance work together in one simple mobile experience. Our goal is an inclusive event companion we can demo by Sunday.";
@@ -184,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         previewDate.textContent = '24–26 October 2026';
         
         charCounter.textContent = `${projectDescInput.value.length} / 500`;
-        showToast('Draft reverted to last milestone.');
+        showToast('Form reset to default.');
       }
     });
   }
@@ -340,8 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
     URL.revokeObjectURL(url);
   }
 
-  // Confirm Team Formation: Gather form data, add to unified teams list, save to localStorage, download single teams.json
-  function confirmTeamFormation() {
+  // Confirm Team Formation: Gather form data and save to Supabase
+  async function confirmTeamFormation() {
     const teamName = teamNameInput ? teamNameInput.value.trim() : '';
     if (!teamName) {
       showToast('Please specify a Team Name before confirming formation.');
@@ -350,59 +344,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const newTeam = collectFormData();
+    newTeam.status = 'CONFIRMED';
 
-    // 1. Retrieve the existing unified teams list from localStorage
-    let teams = [];
-    try {
-      const stored = localStorage.getItem('crewlyy_teams');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        teams = Array.isArray(parsed) ? parsed : (parsed.teams || []);
+    // Save directly to Supabase cloud
+    if (window.CrewlyyDB && typeof window.CrewlyyDB.saveTeam === 'function') {
+      const res = await window.CrewlyyDB.saveTeam(newTeam);
+      if (res && res.success) {
+        console.log('[Supabase] Team saved successfully to Supabase:', newTeam.name);
+      } else {
+        console.error('[Supabase] Failed to save team to Supabase:', res ? res.error : 'Unknown error');
       }
-    } catch (e) {
-      console.warn('Could not read crewlyy_teams from localStorage:', e);
     }
 
-    // 2. Add or update this team in the single unified array
-    const existingIndex = teams.findIndex(t => 
-      (t.id && t.id === newTeam.id) || 
-      (t.name && t.name.toLowerCase() === newTeam.name.toLowerCase())
-    );
-
-    if (existingIndex >= 0) {
-      teams[existingIndex] = newTeam;
-    } else {
-      teams.unshift(newTeam);
-    }
-
-    // 3. Store updated list in localStorage so all pages can immediately read it
-    try {
-      localStorage.setItem('crewlyy_teams', JSON.stringify(teams, null, 2));
-      localStorage.setItem('crewlyy_team_formation', JSON.stringify(newTeam, null, 2));
-    } catch (err) {
-      console.warn('Could not store teams in localStorage:', err);
-    }
-
-    // 4. Trigger download of the single unified teams.json file
-    downloadJsonFile(teams, 'teams.json');
-
-    // 5. Update status indicators
+    // Update status indicators
     if (autosaveText) {
       const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      autosaveText.textContent = `Saved to teams.json (${teams.length} ${teams.length === 1 ? 'team' : 'teams'}) · ${nowStr}`;
+      autosaveText.textContent = `Saved to Supabase · ${nowStr}`;
     }
     if (autosaveDot) {
       autosaveDot.style.background = '#10b981';
     }
 
-    // 6. Update Draft Spec view if visible/initialized
+    // Update Draft Spec view if visible/initialized
     if (specViewElement) {
-      specViewElement.textContent = JSON.stringify(teams, null, 2);
+      specViewElement.textContent = JSON.stringify(newTeam, null, 2);
     }
 
-    // 7. User Feedback Toast
-    showToast(`Team "${teamName}" confirmed! Added to teams.json (${teams.length} total ${teams.length === 1 ? 'team' : 'teams'})`, 4500);
-    return teams;
+    // User Feedback Toast
+    showToast(`Team "${teamName}" confirmed and saved to Cloud Database!`, 4500);
+    return newTeam;
   }
 
   // Bind Confirm Team Formation button
@@ -508,25 +478,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 12. Load saved formation or draft from localStorage on load if available
-  function loadSavedFormation() {
+  // 12. Load latest team formation from Supabase on load
+  async function loadSavedFormation() {
     try {
-      // Check if crewlyy_teams is initialized in localStorage, if not seed from teams.json
-      if (!localStorage.getItem('crewlyy_teams')) {
-        fetch('teams.json')
-          .then(res => res.ok ? res.json() : null)
-          .then(data => {
-            if (data && Array.isArray(data)) {
-              localStorage.setItem('crewlyy_teams', JSON.stringify(data, null, 2));
-            }
-          })
-          .catch(() => {});
-      }
+      if (!window.CrewlyyDB || typeof window.CrewlyyDB.getLatestTeam !== 'function') return;
 
-      const savedStr = localStorage.getItem('crewlyy_team_formation') || localStorage.getItem('crewlyy_team_draft');
-      if (!savedStr) return;
-      const parsed = JSON.parse(savedStr);
-      const t = parsed.team || parsed;
+      const latestTeam = await window.CrewlyyDB.getLatestTeam();
+      if (!latestTeam) return;
+
+      const t = latestTeam.team || latestTeam;
       if (!t) return;
 
       if (t.name && teamNameInput) {
@@ -564,17 +524,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateTagCount();
       }
-      if (parsed.status === 'CONFIRMED' && autosaveText && autosaveDot) {
+      if (latestTeam.status === 'CONFIRMED' && autosaveText && autosaveDot) {
         autosaveDot.style.background = '#10b981';
-        let teamsCount = 1;
-        try {
-          const stored = JSON.parse(localStorage.getItem('crewlyy_teams') || '[]');
-          if (Array.isArray(stored) && stored.length > 0) teamsCount = stored.length;
-        } catch(e) {}
-        autosaveText.textContent = `Saved to teams.json (${teamsCount} ${teamsCount === 1 ? 'team' : 'teams'})`;
+        autosaveText.textContent = 'Synced with Supabase Cloud';
       }
     } catch (err) {
-      console.warn('Failed to load saved formation from localStorage:', err);
+      console.warn('Failed to load saved formation from Supabase:', err);
     }
   }
 

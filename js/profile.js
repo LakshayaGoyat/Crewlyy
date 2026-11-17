@@ -78,12 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3200);
   }
 
-  // Load Saved Profile Data from LocalStorage
-  function loadProfileData() {
+  // Load Saved Profile Data from Supabase
+  async function loadProfileData() {
     try {
-      const saved = localStorage.getItem('crewlyy_user_profile');
-      if (saved) {
-        const data = JSON.parse(saved);
+      if (!window.CrewlyyDB || typeof window.CrewlyyDB.getProfile !== 'function') return;
+      const data = await window.CrewlyyDB.getProfile();
+      if (data) {
         if (data.name && elName) elName.textContent = data.name;
         if (data.headline && elHeadline) elHeadline.textContent = data.headline;
         if (data.location && elLocation) elLocation.textContent = data.location;
@@ -260,11 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       applyStatus(profileData.status);
 
-      // Save to localStorage
-      try {
-        localStorage.setItem('crewlyy_user_profile', JSON.stringify(profileData));
-      } catch (err) {
-        console.warn('Failed to store profile in localStorage:', err);
+      // Save to Supabase
+      if (window.CrewlyyDB && typeof window.CrewlyyDB.saveProfile === 'function') {
+        window.CrewlyyDB.saveProfile(profileData);
       }
 
       closeModal();
@@ -308,12 +306,14 @@ document.addEventListener('DOMContentLoaded', () => {
         statusMenu.classList.remove('is-open');
         showToast(`Availability set to: ${val}`);
 
-        // Persist update
-        try {
-          const saved = JSON.parse(localStorage.getItem('crewlyy_user_profile') || '{}');
-          saved.status = val;
-          localStorage.setItem('crewlyy_user_profile', JSON.stringify(saved));
-        } catch (e) {}
+        // Persist update to Supabase
+        if (window.CrewlyyDB && typeof window.CrewlyyDB.getProfile === 'function') {
+          window.CrewlyyDB.getProfile().then(current => {
+            const updated = current || {};
+            updated.status = val;
+            window.CrewlyyDB.saveProfile(updated);
+          });
+        }
       });
     });
   }
@@ -337,12 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
           if (avatarImg) avatarImg.src = dataUrl;
           showToast('Profile photo updated!');
 
-          // Save avatar to localStorage
-          try {
-            const saved = JSON.parse(localStorage.getItem('crewlyy_user_profile') || '{}');
-            saved.avatar = dataUrl;
-            localStorage.setItem('crewlyy_user_profile', JSON.stringify(saved));
-          } catch (e) {}
+          // Save avatar to Supabase
+          if (window.CrewlyyDB && typeof window.CrewlyyDB.getProfile === 'function') {
+            window.CrewlyyDB.getProfile().then(current => {
+              const updated = current || {};
+              updated.avatar = dataUrl;
+              window.CrewlyyDB.saveProfile(updated);
+            });
+          }
         };
         reader.readAsDataURL(file);
       }

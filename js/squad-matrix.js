@@ -730,37 +730,24 @@
       });
     }
 
-    // Sync / Load teams.json from file upload
+    // Refresh / Sync from Supabase button
     const btnImportTeams = document.getElementById("btn-import-teams");
     const importTeamsInput = document.getElementById("import-teams-input");
-    if (btnImportTeams && importTeamsInput) {
-      btnImportTeams.addEventListener("click", () => {
-        importTeamsInput.click();
-      });
-
-      importTeamsInput.addEventListener("change", (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const parsed = JSON.parse(event.target.result);
-            const teams = Array.isArray(parsed) ? parsed : (parsed.teams || []);
-            if (teams.length > 0) {
-              try {
-                localStorage.setItem('crewlyy_teams', JSON.stringify(teams, null, 2));
-              } catch (err) {}
-              mergeSquads(teams);
-              showToast(`Synced ${teams.length} ${teams.length === 1 ? 'squad' : 'squads'} from ${file.name}!`);
-            } else {
-              showToast("No valid squad records found in the selected file.");
-            }
-          } catch (err) {
-            showToast("Failed to parse JSON file: " + err.message);
+    if (btnImportTeams) {
+      btnImportTeams.textContent = "Sync Supabase";
+      btnImportTeams.addEventListener("click", async () => {
+        if (window.CrewlyyDB && typeof window.CrewlyyDB.getTeams === "function") {
+          showToast("Syncing teams with Supabase...");
+          const cloudTeams = await window.CrewlyyDB.getTeams();
+          if (cloudTeams && cloudTeams.length > 0) {
+            mergeSquads(cloudTeams);
+            showToast(`Successfully synced ${cloudTeams.length} squads from cloud!`);
+          } else {
+            showToast("No squads found on Supabase yet.");
           }
-        };
-        reader.readAsText(file);
-        importTeamsInput.value = "";
+        } else {
+          showToast("Database client not available.");
+        }
       });
     }
   }
@@ -835,30 +822,18 @@
     renderSquads();
   }
 
-  // Load custom teams from localStorage and teams.json
-  function loadStoredSquads() {
-    // 1. Instantly merge from localStorage so client navigation is immediate
-    try {
-      const stored = localStorage.getItem('crewlyy_teams');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        const storedTeams = Array.isArray(parsed) ? parsed : (parsed.teams || []);
-        mergeSquads(storedTeams);
-      }
-    } catch (e) {
-      console.warn("Could not read crewlyy_teams from localStorage:", e);
-    }
-
-    // 2. Fetch teams.json file to keep sync with disk/server
-    fetch('teams.json')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data) {
-          const fileTeams = Array.isArray(data) ? data : (data.teams || []);
-          mergeSquads(fileTeams);
+  // Load squads from Supabase cloud database
+  async function loadStoredSquads() {
+    if (window.CrewlyyDB && typeof window.CrewlyyDB.getTeams === 'function') {
+      try {
+        const cloudTeams = await window.CrewlyyDB.getTeams();
+        if (cloudTeams && Array.isArray(cloudTeams) && cloudTeams.length > 0) {
+          mergeSquads(cloudTeams);
         }
-      })
-      .catch(() => {});
+      } catch (err) {
+        console.warn("Could not fetch squads from Supabase:", err);
+      }
+    }
   }
 
   // Initialize
